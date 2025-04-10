@@ -1,4 +1,7 @@
 import swaggerAutogen from "swagger-autogen";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const doc = {
   info: {
@@ -8,7 +11,7 @@ const doc = {
   },
   servers: [
     {
-      url: "http://localhost:8001"
+      url: `http://localhost:${process.env.SERVER_PORT}`,
     }
   ],
   components: {

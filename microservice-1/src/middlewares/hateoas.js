@@ -9,7 +9,7 @@ export default (req, res, next) => {
     #swagger.ignore = true
     */
     res.okResponse({
-      ...data._doc,
+      ...data.toJSON(),
       _links: generateHateoasLinks(req, data._id),
     });
   }
@@ -80,7 +80,7 @@ const generateHateoasCollection = (req, items, totalPages) => {
       },
     ],
     data: items.map(item => ({
-      ...item.toObject(),
+      ...item.toJSON(),
       _links: generateHateoasLinks(req, item._id),
     })),
   };

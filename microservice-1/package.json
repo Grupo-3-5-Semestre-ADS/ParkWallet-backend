@@ -16,8 +16,9 @@
     "helmet": "8.0.0",
     "http-status": "2.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "8.10.1",
     "morgan": "1.10.0",
+    "mysql2": "^3.14.0",
+    "sequelize": "^6.37.7",
     "swagger-ui-express": "^5.0.1",
     "yup": "^1.6.1"
   },

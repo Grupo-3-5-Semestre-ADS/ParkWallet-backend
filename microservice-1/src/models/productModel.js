@@ -1,17 +1,19 @@
-import mongoose from 'mongoose'
+import { DataTypes } from 'sequelize';
+import database from '../config/database.js';
 
-const productSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true },
+const Product = database.sequelize.define('Product', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
-  {
-    versionKey: false,
-    timestamps: true
-  })
+  description: DataTypes.STRING,
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false
+  }
+}, {
+  tableName: 'products',
+  timestamps: true
+});
 
-
-const Product = mongoose.model("Product", productSchema)
-
-export default Product
+export default Product;

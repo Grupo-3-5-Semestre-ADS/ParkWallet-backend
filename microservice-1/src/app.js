@@ -11,7 +11,7 @@ import database from "./config/database.js";
 import routes from "./routes.js";
 
 dotenv.config();
-database.config(process.env.DATABASE);
+database.connect();
 
 const app = express();
 

@@ -11,7 +11,7 @@ export const showProduct = async (req, res, next) => {
   try {
     const {_id} = req.params;
 
-    const product = await Product.findOne({_id});
+    const product = await Product.findByPk(_id);
 
     if (!product) {
       return res.notFoundResponse();
@@ -29,20 +29,17 @@ export const listProducts = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {_page, _size, _order, ...filter} = req.query;
-    const page = parseInt(_page) || 1;
-    const size = parseInt(_size) || 10;
-    const offset = (page - 1) * size;
+    const {_page = 1, _size = 10, _order = 'id', ...filter} = req.query;
+    const offset = (_page - 1) * _size;
 
-    const products = await Product
-      .find(filter)
-      .skip(offset)
-      .limit(size)
-      .sort(_order)
+    const {rows: products, count: totalItems} = await Product.findAndCountAll({
+      where: filter,
+      offset,
+      limit: parseInt(_size),
+      order: [[_order, 'ASC']],
+    });
 
-    const totalItems = await Product.countDocuments();
-    const totalPages = Math.ceil(totalItems / size);
-
+    const totalPages = Math.ceil(totalItems / _size);
     res.hateoas_list(products, totalPages);
   } catch (err) {
     next(err);
@@ -87,22 +84,17 @@ export const editProduct = async (req, res, next) => {
   */
   try {
     const {name, description, price} = req.body;
-
     const {_id} = req.params;
 
-    const product = await Product.findById(_id);
+    const product = await Product.findByPk(_id);
 
     if (!product) {
       return res.notFoundResponse();
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      {_id},
-      {name, description, price},
-      {new: true}
-    );
+    await product.update({name, description, price});
 
-    res.hateoas_item(updatedProduct);
+    res.hateoas_item(product);
   } catch (err) {
     next(err);
   }
@@ -119,13 +111,13 @@ export const deleteProduct = async (req, res, next) => {
   try {
     const {_id} = req.params;
 
-    const product = await Product.findById(_id);
+    const product = await Product.findByPk(_id);
 
     if (!product) {
       return res.notFoundResponse();
     }
 
-    await Product.deleteOne({_id});
+    await product.destroy();
 
     res.noContentResponse();
   } catch (err) {
