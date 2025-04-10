@@ -155,7 +155,7 @@
         }
       }
     },
-    "/api/products/{_id}": {
+    "/api/products/{id}": {
       "get": {
         "tags": [
           "Products"
@@ -163,7 +163,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -229,7 +229,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -325,7 +325,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -494,89 +494,12 @@
           "name": "HateoasLink"
         }
       },
-      "Login": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "example@email.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "abcd1234"
-          }
-        },
-        "xml": {
-          "name": "Login"
-        }
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "example": "_id"
-          },
-          "name": {
-            "type": "string",
-            "example": "username"
-          },
-          "email": {
-            "type": "string",
-            "example": "example@email.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "abcd1234"
-          },
-          "createdAt": {
-            "type": "string",
-            "example": "2025-01-01T01:00:00.000Z"
-          },
-          "updatedAt": {
-            "type": "string",
-            "example": "2025-01-01T01:00:00.000Z"
-          },
-          "_links": {
-            "type": "array",
-            "items": {
-              "xml": {
-                "name": "hateoaslink"
-              },
-              "$ref": "#/components/schemas/HateoasLink"
-            }
-          }
-        },
-        "xml": {
-          "name": "User"
-        }
-      },
-      "CreateOrUpdateUser": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "username"
-          },
-          "email": {
-            "type": "string",
-            "example": "example@email.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "abcd1234"
-          }
-        },
-        "xml": {
-          "name": "CreateOrUpdateUser"
-        }
-      },
       "Product": {
         "type": "object",
         "properties": {
-          "_id": {
+          "id": {
             "type": "string",
-            "example": "_id"
+            "example": "id"
           },
           "name": {
             "type": "string",
@@ -589,6 +512,10 @@
           "price": {
             "type": "number",
             "example": 100
+          },
+          "inactive": {
+            "type": "boolean",
+            "example": false
           },
           "createdAt": {
             "type": "string",
@@ -626,6 +553,10 @@
           "price": {
             "type": "number",
             "example": 100
+          },
+          "inactive": {
+            "type": "boolean",
+            "example": false
           }
         },
         "xml": {

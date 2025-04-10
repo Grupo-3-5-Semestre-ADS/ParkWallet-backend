@@ -10,7 +10,7 @@ export default (req, res, next) => {
     */
     res.okResponse({
       ...data.toJSON(),
-      _links: generateHateoasLinks(req, data._id),
+      _links: generateHateoasLinks(req, data.id),
     });
   }
 
@@ -81,7 +81,7 @@ const generateHateoasCollection = (req, items, totalPages) => {
     ],
     data: items.map(item => ({
       ...item.toJSON(),
-      _links: generateHateoasLinks(req, item._id),
+      _links: generateHateoasLinks(req, item.id),
     })),
   };
 };

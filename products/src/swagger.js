@@ -47,31 +47,12 @@ const doc = {
         href: "/api/endpoint",
         method: "METHOD"
       },
-      Login: {
-        email: "example@email.com",
-        password: "abcd1234"
-      },
-      User: {
-        _id: "_id",
-        name: "username",
-        email: "example@email.com",
-        password: "abcd1234",
-        createdAt: "2025-01-01T01:00:00.000Z",
-        updatedAt: "2025-01-01T01:00:00.000Z",
-        _links: [
-          {$ref: "#/components/schemas/HateoasLink"}
-        ]
-      },
-      CreateOrUpdateUser: {
-        name: "username",
-        email: "example@email.com",
-        password: "abcd1234"
-      },
       Product: {
-        _id: "_id",
+        id: "id",
         name: "product name",
         description: "product description",
         price: 100.00,
+        inactive: false,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
         _links: [
@@ -82,6 +63,7 @@ const doc = {
         name: "product name",
         description: "product description",
         price: 100.00,
+        inactive: false
       },
     }
   }

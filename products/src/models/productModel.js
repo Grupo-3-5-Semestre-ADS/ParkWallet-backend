@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import {DataTypes} from 'sequelize';
 import database from '../config/database.js';
 
 const Product = database.sequelize.define('Product', {
@@ -6,9 +6,20 @@ const Product = database.sequelize.define('Product', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  description: DataTypes.STRING,
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
   price: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+    validate: {
+      min: 0
+    }
+  },
+  inactive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
     allowNull: false
   }
 }, {

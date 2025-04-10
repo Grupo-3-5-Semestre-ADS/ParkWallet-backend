@@ -9,9 +9,9 @@ export const showProduct = async (req, res, next) => {
   }
   */
   try {
-    const {_id} = req.params;
+    const {id} = req.params;
 
-    const product = await Product.findByPk(_id);
+    const product = await Product.findByPk(id);
 
     if (!product) {
       return res.notFoundResponse();
@@ -84,9 +84,9 @@ export const editProduct = async (req, res, next) => {
   */
   try {
     const {name, description, price} = req.body;
-    const {_id} = req.params;
+    const {id} = req.params;
 
-    const product = await Product.findByPk(_id);
+    const product = await Product.findByPk(id);
 
     if (!product) {
       return res.notFoundResponse();
@@ -109,9 +109,9 @@ export const deleteProduct = async (req, res, next) => {
   }
   */
   try {
-    const {_id} = req.params;
+    const {id} = req.params;
 
-    const product = await Product.findByPk(_id);
+    const product = await Product.findByPk(id);
 
     if (!product) {
       return res.notFoundResponse();
