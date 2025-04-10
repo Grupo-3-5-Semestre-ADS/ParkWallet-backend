@@ -1,21 +1,5 @@
 import jsonwebtoken from "jsonwebtoken";
 
-export const generate = (req, res, next) => {
-  if (!req.user) {
-    return res.unauthorized();
-  }
-
-  const payload = {
-    email: req.user.email,
-  };
-
-  const token = jsonwebtoken.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRATION_TIME,
-  });
-
-  res.okResponse({token});
-}
-
 export const verify = (req, res, next) => {
   /*
   #swagger.autoHeaders = false

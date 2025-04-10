@@ -6,8 +6,6 @@ import handlers from "./middlewares/handlers.js";
 
 import InternalServerError from './routes/helper/500.js'
 import NotFound from './routes/helper/404.js'
-import authRouter from './routes/authRouter.js'
-import userRouter from './routes/userRouter.js'
 import productRouter from "./routes/productRouter.js";
 import {verify} from "./controllers/authController.js";
 
@@ -17,8 +15,6 @@ routes.use(hateoas);
 routes.use(handlers);
 routes.use(order);
 
-routes.use("/login", authRouter);
-routes.use("/api/users", verify, userRouter);
 routes.use("/api/products", verify, productRouter);
 
 routes.use(InternalServerError)
