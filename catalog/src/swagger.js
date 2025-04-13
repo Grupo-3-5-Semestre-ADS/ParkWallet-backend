@@ -65,6 +65,28 @@ const doc = {
         price: 100.00,
         inactive: false
       },
+      Facility: {
+        id: "id",
+        name: "facility name",
+        description: "facility description",
+        type: "store, attraction or other",
+        latitude: -10.000000,
+        longitude: 10.000000,
+        inactive: false,
+        createdAt: "2025-01-01T01:00:00.000Z",
+        updatedAt: "2025-01-01T01:00:00.000Z",
+        _links: [
+          {$ref: "#/components/schemas/HateoasLink"}
+        ]
+      },
+      CreateOrUpdateFacility: {
+        name: "facility name",
+        description: "facility description",
+        type: "store, attraction or other",
+        latitude: -10.000000,
+        longitude: 10.000000,
+        inactive: false
+      },
     }
   }
 };

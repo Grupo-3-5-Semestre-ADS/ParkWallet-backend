@@ -9,40 +9,40 @@ x-healthcheck: &healthcheck
     start_period: 10s
 
 services:
-  products-api:
+  catalog-api:
     build:
-      context: ./products
+      context: ./catalog
       dockerfile: Dockerfile
-    container_name: products-api
+    container_name: catalog-api
     ports:
       - "8080:8080"
     environment:
       SERVER_PORT: 8080
-      MYSQL_DATABASE: product
+      MYSQL_DATABASE: catalog
       MYSQL_USER: root
       MYSQL_PASSWORD: root
-      MYSQL_HOST: products-db
+      MYSQL_HOST: catalog-db
     depends_on:
-      products-db:
+      catalog-db:
         condition: service_healthy
     networks:
-      - products
+      - catalog
 
-  products-db:
+  catalog-db:
     image: mysql:8.0
     container_name: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: product
+      MYSQL_DATABASE: catalog
     networks:
-          - products
+          - catalog
     volumes:
-      - products:/var/lib/mysql
+      - catalog:/var/lib/mysql
     <<: *healthcheck
 
 networks:
-  products:
+  catalog:
 
 volumes:
-  products:
+  catalog:

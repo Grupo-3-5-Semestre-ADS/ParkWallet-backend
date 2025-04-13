@@ -18,5 +18,8 @@ export default yup
       .typeError("Must be a number (price)")
       .min(0, "Negative not allowed (price)")
       .max(99999999.99, "Too high (max is 99,999,999.99)")
-      .required("Required (price)")
+      .required("Required (price)"),
+    inactive: yup
+      .boolean()
+      .optional()
   })
