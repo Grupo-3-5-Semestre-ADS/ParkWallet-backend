@@ -7,6 +7,7 @@ import handlers from "./middlewares/handlers.js";
 import InternalServerError from './routes/helper/500.js'
 import NotFound from './routes/helper/404.js'
 import productRouter from "./routes/productRouter.js";
+import facilityRouter from "./routes/facilityRouter.js";
 // import {verify} from "./controllers/authController.js";
 
 const routes = Router();
