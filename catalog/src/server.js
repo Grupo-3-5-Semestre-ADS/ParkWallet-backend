@@ -11,6 +11,6 @@ const listening = () => {
 };
 
 const server = http.createServer(app);
-server.listen(process.env.SERVER_PORT || 4040);
+server.listen(process.env.SERVER_PORT || 8081);
 server.on('error', error);
 server.on('listening', listening);
