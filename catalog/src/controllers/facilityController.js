@@ -1,4 +1,4 @@
-import Facility from "../models/facilityModel.js";
+import {Facility} from "../models/index.js";
 
 export const showFacility = async (req, res, next) => {
   /*
