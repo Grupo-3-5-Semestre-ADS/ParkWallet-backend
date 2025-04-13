@@ -14,7 +14,7 @@ export default (req, res, next) => {
     });
   }
 
-  res.hateoas_list = (data, totalPages) => {
+  res.hateoas_list = (data, totalPages = 1) => {
     res.okResponse(generateHateoasCollection(req, data, totalPages));
   }
 

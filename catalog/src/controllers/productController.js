@@ -56,12 +56,13 @@ export const createProduct = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {name, description, price} = req.body;
+    const {name, description, price, facilityId} = req.body;
 
     await Product.create({
       name,
       description,
-      price
+      price,
+      facilityId
     });
 
     res.createdResponse();
@@ -83,7 +84,7 @@ export const editProduct = async (req, res, next) => {
   }
   */
   try {
-    const {name, description, price} = req.body;
+    const {name, description, price, facilityId} = req.body;
     const {id} = req.params;
 
     const product = await Product.findByPk(id);
@@ -92,7 +93,7 @@ export const editProduct = async (req, res, next) => {
       return res.notFoundResponse();
     }
 
-    await product.update({name, description, price});
+    await product.update({name, description, price, facilityId});
 
     res.hateoas_item(product);
   } catch (err) {

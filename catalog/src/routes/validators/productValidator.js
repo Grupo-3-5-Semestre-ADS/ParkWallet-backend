@@ -21,5 +21,9 @@ export default yup
       .required("Required (price)"),
     inactive: yup
       .boolean()
-      .optional()
+      .optional(),
+    facilityId: yup
+      .number()
+      .min(0, "Negative not allowed (facilityId)")
+      .required("Required (facilityId)")
   })

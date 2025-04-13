@@ -53,6 +53,7 @@ const doc = {
         description: "product description",
         price: 100.00,
         inactive: false,
+        facilityId: 1,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
         _links: [
@@ -63,7 +64,8 @@ const doc = {
         name: "product name",
         description: "product description",
         price: 100.00,
-        inactive: false
+        inactive: false,
+        facilityId: 1
       },
       Facility: {
         id: "id",

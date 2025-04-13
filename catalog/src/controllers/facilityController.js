@@ -46,6 +46,32 @@ export const listFacilities = async (req, res, next) => {
   }
 };
 
+
+export const listProductsByFacility = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Facilities"]
+  #swagger.responses[200]
+  #swagger.responses[404] = {
+    schema: { $ref: "#/definitions/NotFound" }
+  }
+  */
+  try {
+    const {id} = req.params;
+
+    const facility = await Facility.findByPk(id);
+
+    if (!facility) {
+      return res.notFoundResponse();
+    }
+
+    const products = await facility.getProducts();
+
+    res.hateoas_list(products);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const createFacility = async (req, res, next) => {
   /*
   #swagger.tags = ["Facilities"]
