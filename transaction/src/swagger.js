@@ -67,13 +67,11 @@ const doc = {
         inactive: false,
         facilityId: 1
       },
-      Facility: {
+      Transaction: {
         id: "id",
-        name: "facility name",
-        description: "facility description",
-        type: "store, attraction or other",
-        latitude: -10.000000,
-        longitude: 10.000000,
+        userId: "userId",
+        totalValue: 10.00,
+        operation: "purchase or credit",
         inactive: false,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
@@ -81,12 +79,10 @@ const doc = {
           {$ref: "#/components/schemas/HateoasLink"}
         ]
       },
-      CreateOrUpdateFacility: {
-        name: "facility name",
-        description: "facility description",
-        type: "store, attraction or other",
-        latitude: -10.000000,
-        longitude: 10.000000,
+      CreateOrUpdateTransaction: {
+        userId: "userId",
+        totalValue: 10.00,
+        operation: "purchase or credit",
         inactive: false
       },
     }
