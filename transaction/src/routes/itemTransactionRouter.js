@@ -5,13 +5,13 @@ import {
   createItemTransaction,
   deleteItemTransaction,
   editItemTransaction,
-  listItemTransactions,
+  listItemsTransaction,
   showItemTransaction
 } from "../controllers/itemTransactionController.js";
 
 const router = Router()
 
-router.get('/', listItemTransactions)
+router.get('/', listItemsTransaction)
 router.get('/:id', showItemTransaction)
 router.post('/', validator(schema), createItemTransaction)
 router.put('/:id', validator(schema), editItemTransaction)
