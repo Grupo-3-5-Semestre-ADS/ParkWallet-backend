@@ -1,8 +1,8 @@
-import {Product} from '../models/index.js';
+import {ItemTransaction} from '../models/index.js';
 
-export const showProduct = async (req, res, next) => {
+export const showItemTransaction = async (req, res, next) => {
   /*
-  #swagger.tags = ["Products"]
+  #swagger.tags = ["ItemsTransaction"]
   #swagger.responses[200]
   #swagger.responses[404] = {
     schema: { $ref: "#/definitions/NotFound" }
@@ -11,28 +11,28 @@ export const showProduct = async (req, res, next) => {
   try {
     const {id} = req.params;
 
-    const product = await Product.findByPk(id);
+    const itemTransaction = await ItemTransaction.findByPk(id);
 
-    if (!product) {
+    if (!itemTransaction) {
       return res.notFoundResponse();
     }
 
-    res.hateoas_item(product);
+    res.hateoas_item(itemTransaction);
   } catch (err) {
     next(err);
   }
 };
 
-export const listProducts = async (req, res, next) => {
+export const listItemsTransaction = async (req, res, next) => {
   /*
-  #swagger.tags = ["Products"]
+  #swagger.tags = ["ItemsTransaction"]
   #swagger.responses[200]
   */
   try {
     const {_page = 1, _size = 10, _order = 'id', ...filter} = req.query;
     const offset = (_page - 1) * _size;
 
-    const {rows: products, count: totalItems} = await Product.findAndCountAll({
+    const {rows: itemsTransaction, count: totalItems} = await ItemTransaction.findAndCountAll({
       where: filter,
       offset,
       limit: parseInt(_size),
@@ -40,25 +40,25 @@ export const listProducts = async (req, res, next) => {
     });
 
     const totalPages = Math.ceil(totalItems / _size);
-    res.hateoas_list(products, totalPages);
+    res.hateoas_list(itemsTransaction, totalPages);
   } catch (err) {
     next(err);
   }
 };
 
-export const createProduct = async (req, res, next) => {
+export const createItemTransaction = async (req, res, next) => {
   /*
-  #swagger.tags = ["Products"]
+  #swagger.tags = ["ItemsTransaction"]
   #swagger.requestBody = {
     required: true,
-    schema: { $ref: "#/definitions/CreateOrUpdateProduct" }
+    schema: { $ref: "#/definitions/CreateOrUpdateItemTransaction" }
   }
   #swagger.responses[200]
   */
   try {
     const {name, description, price, facilityId} = req.body;
 
-    await Product.create({
+    await ItemTransaction.create({
       name,
       description,
       price,
@@ -71,12 +71,12 @@ export const createProduct = async (req, res, next) => {
   }
 };
 
-export const editProduct = async (req, res, next) => {
+export const editItemTransaction = async (req, res, next) => {
   /*
-  #swagger.tags = ["Products"]
+  #swagger.tags = ["ItemsTransaction"]
   #swagger.requestBody = {
     required: true,
-    schema: { $ref: "#/definitions/CreateOrUpdateProduct" }
+    schema: { $ref: "#/definitions/CreateOrUpdateItemTransaction" }
   }
   #swagger.responses[200]
   #swagger.responses[404] = {
@@ -87,23 +87,23 @@ export const editProduct = async (req, res, next) => {
     const {name, description, price, facilityId} = req.body;
     const {id} = req.params;
 
-    const product = await Product.findByPk(id);
+    const itemTransaction = await ItemTransaction.findByPk(id);
 
-    if (!product) {
+    if (!itemTransaction) {
       return res.notFoundResponse();
     }
 
-    await product.update({name, description, price, facilityId});
+    await itemTransaction.update({name, description, price, facilityId});
 
-    res.hateoas_item(product);
+    res.hateoas_item(itemTransaction);
   } catch (err) {
     next(err);
   }
 };
 
-export const deleteProduct = async (req, res, next) => {
+export const deleteItemTransaction = async (req, res, next) => {
   /*
-  #swagger.tags = ["Products"]
+  #swagger.tags = ["ItemsTransaction"]
   #swagger.responses[204]
   #swagger.responses[404] = {
     schema: { $ref: "#/definitions/NotFound" }
@@ -112,13 +112,13 @@ export const deleteProduct = async (req, res, next) => {
   try {
     const {id} = req.params;
 
-    const product = await Product.findByPk(id);
+    const itemTransaction = await ItemTransaction.findByPk(id);
 
-    if (!product) {
+    if (!itemTransaction) {
       return res.notFoundResponse();
     }
 
-    await product.destroy();
+    await itemTransaction.destroy();
 
     res.noContentResponse();
   } catch (err) {

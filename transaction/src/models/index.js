@@ -1,19 +1,18 @@
 import Transaction from './transactionModel.js';
-import Product from './productModel.js';
+import ItemTransaction from './itemTransactionModel.js';
 
-// Definindo as Associações
-Transaction.hasMany(Product, {
-  foreignKey: 'facilityId',
-  as: 'products',
+Transaction.hasMany(ItemTransaction, {
+  foreignKey: 'transactionId',
+  as: 'itemsTransaction',
   onUpdate: 'CASCADE',
   onDelete: 'RESTRICT'
 });
 
-Product.belongsTo(Transaction, {
-  foreignKey: 'facilityId',
-  as: 'facility',
+ItemTransaction.belongsTo(Transaction, {
+  foreignKey: 'transactionId',
+  as: 'transaction',
   onUpdate: 'CASCADE',
   onDelete: 'RESTRICT'
 });
 
-export { Transaction, Product };
+export { Transaction, ItemTransaction };
