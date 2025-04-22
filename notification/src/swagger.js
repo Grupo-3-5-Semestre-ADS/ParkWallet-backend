@@ -47,19 +47,21 @@ const doc = {
         href: "/api/endpoint",
         method: "METHOD"
       },
-      Wallet: {
+      Notification: {
         id: "id",
         userId: "userId",
-        balance: 10.00,
+        text: "Notification text",
+        receivedByTheUser: false,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
         _links: [
           {$ref: "#/components/schemas/HateoasLink"}
         ]
       },
-      CreateOrUpdateWallet: {
+      CreateOrUpdateNotification: {
         userId: "userId",
-        balance: 10.00
+        text: "Notification text",
+        receivedByTheUser: false
       },
     }
   }

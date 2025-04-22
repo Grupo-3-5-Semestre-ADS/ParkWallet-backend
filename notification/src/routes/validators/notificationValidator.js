@@ -8,9 +8,11 @@ export default yup
       .integer()
       .typeError("Must be a number (userId)")
       .required("Required (userId)"),
-    balance: yup
+    text: yup
       .string()
-      .min(0, "Negative not allowed (balance)")
-      .max(99999999.99, "Too high (balance)")
-      .required("Required (balance)")
+      .min(4, "Message too short (text)")
+      .required("Required (text)"),
+    receivedByTheUser: yup
+      .boolean
+      .required("Required (receivedByTheUser)")
   })

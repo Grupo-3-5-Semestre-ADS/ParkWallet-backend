@@ -7,14 +7,14 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8082"
+      "url": "http://localhost:8080"
     }
   ],
   "paths": {
-    "/api/transactions/": {
+    "/api/notification/": {
       "get": {
         "tags": [
-          "Wallets"
+          "Notifications"
         ],
         "description": "",
         "parameters": [
@@ -85,7 +85,7 @@
       },
       "post": {
         "tags": [
-          "Wallets"
+          "Notifications"
         ],
         "description": "",
         "responses": {
@@ -143,22 +143,22 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateWallet"
+                "$ref": "#/components/schemas/CreateOrUpdateNotification"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateWallet"
+                "$ref": "#/components/schemas/CreateOrUpdateNotification"
               }
             }
           }
         }
       }
     },
-    "/api/transactions/{id}": {
+    "/api/notification/{id}": {
       "get": {
         "tags": [
-          "Wallets"
+          "Notifications"
         ],
         "description": "",
         "parameters": [
@@ -224,7 +224,7 @@
       },
       "put": {
         "tags": [
-          "Wallets"
+          "Notifications"
         ],
         "description": "",
         "parameters": [
@@ -307,12 +307,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateWallet"
+                "$ref": "#/components/schemas/CreateOrUpdateNotification"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateWallet"
+                "$ref": "#/components/schemas/CreateOrUpdateNotification"
               }
             }
           }
@@ -320,7 +320,7 @@
       },
       "delete": {
         "tags": [
-          "Wallets"
+          "Notifications"
         ],
         "description": "",
         "parameters": [
@@ -494,7 +494,7 @@
           "name": "HateoasLink"
         }
       },
-      "Wallet": {
+      "Notification": {
         "type": "object",
         "properties": {
           "id": {
@@ -505,9 +505,13 @@
             "type": "string",
             "example": "userId"
           },
-          "balance": {
-            "type": "number",
-            "example": 10
+          "text": {
+            "type": "string",
+            "example": "Notification text"
+          },
+          "receivedByTheUser": {
+            "type": "boolean",
+            "example": false
           },
           "createdAt": {
             "type": "string",
@@ -528,23 +532,27 @@
           }
         },
         "xml": {
-          "name": "Wallet"
+          "name": "Notification"
         }
       },
-      "CreateOrUpdateWallet": {
+      "CreateOrUpdateNotification": {
         "type": "object",
         "properties": {
           "userId": {
             "type": "string",
             "example": "userId"
           },
-          "balance": {
-            "type": "number",
-            "example": 10
+          "text": {
+            "type": "string",
+            "example": "Notification text"
+          },
+          "receivedByTheUser": {
+            "type": "boolean",
+            "example": false
           }
         },
         "xml": {
-          "name": "CreateOrUpdateWallet"
+          "name": "CreateOrUpdateNotification"
         }
       }
     }

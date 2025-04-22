@@ -1,3 +1,3 @@
-import Wallet from './walletModel.js';
+import Notification from './notificationModel.js';
 
-export { Wallet };
+export { Notification };
