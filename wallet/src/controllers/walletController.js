@@ -56,12 +56,11 @@ export const createWallet = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {userId, totalValue, operation} = req.body;
+    const {userId, balance} = req.body;
 
     await Wallet.create({
       userId,
-      totalValue,
-      operation,
+      balance,
     });
 
     res.createdResponse();
@@ -83,7 +82,7 @@ export const editWallet = async (req, res, next) => {
   }
   */
   try {
-    const {userId, totalValue, operation} = req.body;
+    const {userId, balance} = req.body;
     const {id} = req.params;
 
     const wallet = await Wallet.findByPk(id);
@@ -94,8 +93,7 @@ export const editWallet = async (req, res, next) => {
 
     await wallet.update({
       userId,
-      totalValue,
-      operation,
+      balance,
     });
 
     res.hateoas_item(wallet);
@@ -104,7 +102,6 @@ export const editWallet = async (req, res, next) => {
   }
 };
 
-// TODO change this to an inactivation function
 export const deleteWallet = async (req, res, next) => {
   /*
   #swagger.tags = ["Wallets"]
