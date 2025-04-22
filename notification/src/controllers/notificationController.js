@@ -56,12 +56,12 @@ export const createNotification = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {userId, totalValue, operation} = req.body;
+    const {userId, text, receivedByTheUser} = req.body;
 
     await Notification.create({
       userId,
-      totalValue,
-      operation,
+      text,
+      receivedByTheUser,
     });
 
     res.createdResponse();
@@ -83,7 +83,7 @@ export const editNotification = async (req, res, next) => {
   }
   */
   try {
-    const {userId, totalValue, operation} = req.body;
+    const {userId, text, receivedByTheUser} = req.body;
     const {id} = req.params;
 
     const notification = await Notification.findByPk(id);
@@ -94,8 +94,8 @@ export const editNotification = async (req, res, next) => {
 
     await notification.update({
       userId,
-      totalValue,
-      operation,
+      text,
+      receivedByTheUser,
     });
 
     res.hateoas_item(notification);
@@ -104,7 +104,6 @@ export const editNotification = async (req, res, next) => {
   }
 };
 
-// TODO change this to an inactivation function
 export const deleteNotification = async (req, res, next) => {
   /*
   #swagger.tags = ["Notifications"]
