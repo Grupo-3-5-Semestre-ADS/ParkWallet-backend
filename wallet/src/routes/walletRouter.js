@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import validator from "../middlewares/validator.js";
-import schema from "./validators/transactionValidator.js";
+import schema from "./validators/walletValidator.js";
 import {
   createWallet,
   deleteWallet,
