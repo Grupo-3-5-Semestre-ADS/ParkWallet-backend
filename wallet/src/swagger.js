@@ -47,37 +47,19 @@ const doc = {
         href: "/api/endpoint",
         method: "METHOD"
       },
-      ItemsTransaction: {
-        id: "id",
-        productId: "id",
-        quantity: 10,
-        totalValue: 100.00,
-        _links: [
-          {$ref: "#/components/schemas/HateoasLink"}
-        ]
-      },
-      CreateOrUpdateItemTransaction: {
-        productId: "id",
-        quantity: 10,
-        totalValue: 100.00
-      },
-      Transaction: {
+      Wallet: {
         id: "id",
         userId: "userId",
-        totalValue: 10.00,
-        operation: "purchase or credit",
-        inactive: false,
+        balance: 10.00,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
         _links: [
           {$ref: "#/components/schemas/HateoasLink"}
         ]
       },
-      CreateOrUpdateTransaction: {
+      CreateOrUpdateWallet: {
         userId: "userId",
-        totalValue: 10.00,
-        operation: "purchase or credit",
-        inactive: false
+        balance: 10.00
       },
     }
   }

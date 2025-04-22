@@ -14,7 +14,7 @@
     "/api/transactions/": {
       "get": {
         "tags": [
-          "Transactions"
+          "Wallets"
         ],
         "description": "",
         "parameters": [
@@ -85,7 +85,7 @@
       },
       "post": {
         "tags": [
-          "Transactions"
+          "Wallets"
         ],
         "description": "",
         "responses": {
@@ -143,80 +143,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateTransaction"
+                "$ref": "#/components/schemas/CreateOrUpdateWallet"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateTransaction"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/transactions/{id}/items": {
-      "get": {
-        "tags": [
-          "Transactions"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
+                "$ref": "#/components/schemas/CreateOrUpdateWallet"
               }
             }
           }
@@ -226,7 +158,7 @@
     "/api/transactions/{id}": {
       "get": {
         "tags": [
-          "Transactions"
+          "Wallets"
         ],
         "description": "",
         "parameters": [
@@ -292,7 +224,7 @@
       },
       "put": {
         "tags": [
-          "Transactions"
+          "Wallets"
         ],
         "description": "",
         "parameters": [
@@ -375,12 +307,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateTransaction"
+                "$ref": "#/components/schemas/CreateOrUpdateWallet"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateTransaction"
+                "$ref": "#/components/schemas/CreateOrUpdateWallet"
               }
             }
           }
@@ -388,381 +320,7 @@
       },
       "delete": {
         "tags": [
-          "Transactions"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/itemsTransaction/": {
-      "get": {
-        "tags": [
-          "ItemsTransaction"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "_page",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "_size",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "_order",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "filter",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "ItemsTransaction"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "402": {
-            "description": "Payment Required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateItemTransaction"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateItemTransaction"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/itemsTransaction/{id}": {
-      "get": {
-        "tags": [
-          "ItemsTransaction"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "ItemsTransaction"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "402": {
-            "description": "Payment Required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateItemTransaction"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateItemTransaction"
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "ItemsTransaction"
+          "Wallets"
         ],
         "description": "",
         "parameters": [
@@ -936,60 +494,7 @@
           "name": "HateoasLink"
         }
       },
-      "ItemsTransaction": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "id"
-          },
-          "productId": {
-            "type": "string",
-            "example": "id"
-          },
-          "quantity": {
-            "type": "number",
-            "example": 10
-          },
-          "totalValue": {
-            "type": "number",
-            "example": 100
-          },
-          "_links": {
-            "type": "array",
-            "items": {
-              "xml": {
-                "name": "hateoaslink"
-              },
-              "$ref": "#/components/schemas/HateoasLink"
-            }
-          }
-        },
-        "xml": {
-          "name": "ItemsTransaction"
-        }
-      },
-      "CreateOrUpdateItemTransaction": {
-        "type": "object",
-        "properties": {
-          "productId": {
-            "type": "string",
-            "example": "id"
-          },
-          "quantity": {
-            "type": "number",
-            "example": 10
-          },
-          "totalValue": {
-            "type": "number",
-            "example": 100
-          }
-        },
-        "xml": {
-          "name": "CreateOrUpdateItemTransaction"
-        }
-      },
-      "Transaction": {
+      "Wallet": {
         "type": "object",
         "properties": {
           "id": {
@@ -1000,17 +505,9 @@
             "type": "string",
             "example": "userId"
           },
-          "totalValue": {
+          "balance": {
             "type": "number",
             "example": 10
-          },
-          "operation": {
-            "type": "string",
-            "example": "purchase or credit"
-          },
-          "inactive": {
-            "type": "boolean",
-            "example": false
           },
           "createdAt": {
             "type": "string",
@@ -1031,31 +528,23 @@
           }
         },
         "xml": {
-          "name": "Transaction"
+          "name": "Wallet"
         }
       },
-      "CreateOrUpdateTransaction": {
+      "CreateOrUpdateWallet": {
         "type": "object",
         "properties": {
           "userId": {
             "type": "string",
             "example": "userId"
           },
-          "totalValue": {
+          "balance": {
             "type": "number",
             "example": 10
-          },
-          "operation": {
-            "type": "string",
-            "example": "purchase or credit"
-          },
-          "inactive": {
-            "type": "boolean",
-            "example": false
           }
         },
         "xml": {
-          "name": "CreateOrUpdateTransaction"
+          "name": "CreateOrUpdateWallet"
         }
       }
     }

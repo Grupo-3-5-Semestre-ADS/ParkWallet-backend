@@ -8,17 +8,9 @@ export default yup
       .integer()
       .typeError("Must be a number (userId)")
       .required("Required (userId)"),
-    totalValue: yup
+    balance: yup
       .string()
-      .min(0, "Negative not allowed (totalValue)")
-      .max(99999999.99, "Too high (totalValue)")
-      .required("Required (totalValue)"),
-    operation: yup
-      .string()
-      .oneOf(["purchase", "credit"],
-        "Invalid operation (must be 'purchase' or 'credit')")
-      .required("Required (operation)"),
-    inactive: yup
-      .boolean()
-      .optional()
+      .min(0, "Negative not allowed (balance)")
+      .max(99999999.99, "Too high (balance)")
+      .required("Required (balance)")
   })
