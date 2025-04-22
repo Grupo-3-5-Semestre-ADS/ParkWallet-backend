@@ -6,7 +6,7 @@ import handlers from "./middlewares/handlers.js";
 
 import InternalServerError from './routes/helper/500.js'
 import NotFound from './routes/helper/404.js'
-import transactionRouter from "./routes/walletRouter.js";
+import walletRouter from "./routes/walletRouter.js";
 // import {verify} from "./controllers/authController.js";
 
 const routes = Router();
@@ -15,7 +15,7 @@ routes.use(hateoas);
 routes.use(handlers);
 routes.use(order);
 
-routes.use("/api/transactions", /*verify,*/ transactionRouter);
+routes.use("/api/wallet", /*verify,*/ walletRouter);
 
 routes.use(InternalServerError)
 routes.use(NotFound)
