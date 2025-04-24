@@ -9,13 +9,44 @@ x-healthcheck: &healthcheck
     start_period: 10s
 
 services:
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_PORT: 8080
+
+      CATALOG_HOST: catalog-api
+      CHAT_HOST: chat-api
+      NOTIFICATION_HOST: notification-api
+      TRANSACTION_HOST: transaction-api
+      WALLET_HOST: wallet-api
+      USER_HOST: user-api
+
+      CATALOG_PORT: 8080
+      CHAT_PORT: 8080
+      NOTIFICATION_PORT: 8080
+      TRANSACTION_PORT: 8080
+      WALLET_PORT: 8080
+      USER_PORT: 8080
+    networks:
+      - catalog
+      - chat
+      - notification
+      - transaction
+      - wallet
+      - user
+
+  # Microservices
   catalog-api:
     build:
       context: ./catalog
       dockerfile: Dockerfile
     container_name: catalog-api
-    ports:
-      - "8080:8080"
     environment:
       SERVER_PORT: 8080
       MYSQL_DATABASE: catalog
@@ -28,21 +59,182 @@ services:
     networks:
       - catalog
 
+  chat-api:
+    build:
+      context: ./chat
+      dockerfile: Dockerfile
+    container_name: chat-api
+    environment:
+      SERVER_PORT: 8080
+      MYSQL_DATABASE: chat
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_HOST: chat-db
+    depends_on:
+      chat-db:
+        condition: service_healthy
+    networks:
+      - chat
+
+  notification-api:
+    build:
+      context: ./notification
+      dockerfile: Dockerfile
+    container_name: notification-api
+    environment:
+      SERVER_PORT: 8080
+      MYSQL_DATABASE: notification
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_HOST: notification-db
+    depends_on:
+      notification-db:
+        condition: service_healthy
+    networks:
+      - notification
+
+  transaction-api:
+    build:
+      context: ./transaction
+      dockerfile: Dockerfile
+    container_name: transaction-api
+    environment:
+      SERVER_PORT: 8080
+      MYSQL_DATABASE: transaction
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_HOST: transaction-db
+    depends_on:
+      transaction-db:
+        condition: service_healthy
+    networks:
+      - transaction
+
+  wallet-api:
+    build:
+      context: ./wallet
+      dockerfile: Dockerfile
+    container_name: wallet-api
+    environment:
+      SERVER_PORT: 8080
+      MYSQL_DATABASE: wallet
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_HOST: wallet-db
+    depends_on:
+      wallet-db:
+        condition: service_healthy
+    networks:
+      - wallet
+
+  # user-api:
+  #   build:
+  #     context: ./user
+  #     dockerfile: Dockerfile
+  #   container_name: user-api
+  #   environment:
+  #     SERVER_PORT: 8080
+  #     MYSQL_DATABASE: user
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #     MYSQL_HOST: user-db
+  #   depends_on:
+  #     user-db:
+  #       condition: service_healthy
+  #   networks:
+  #     - user
+
+  # Databases
   catalog-db:
     image: mysql:8.0
-    container_name: mysql
+    container_name: catalog-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: catalog
     networks:
-          - catalog
+      - catalog
     volumes:
       - catalog:/var/lib/mysql
     <<: *healthcheck
 
+  chat-db:
+    image: mysql:8.0
+    container_name: chat-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: chat
+    networks:
+      - chat
+    volumes:
+      - chat:/var/lib/mysql
+    <<: *healthcheck
+
+  notification-db:
+    image: mysql:8.0
+    container_name: notification-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notification
+    networks:
+      - notification
+    volumes:
+      - notification:/var/lib/mysql
+    <<: *healthcheck
+
+  transaction-db:
+    image: mysql:8.0
+    container_name: transaction-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: transaction
+    networks:
+      - transaction
+    volumes:
+      - transaction:/var/lib/mysql
+    <<: *healthcheck
+
+  wallet-db:
+    image: mysql:8.0
+    container_name: wallet-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wallet
+    networks:
+      - wallet
+    volumes:
+      - wallet:/var/lib/mysql
+    <<: *healthcheck
+
+  user-db:
+    image: mysql:8.0
+    container_name: user-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: user
+    networks:
+      - user
+    volumes:
+      - user:/var/lib/mysql
+    <<: *healthcheck
+
 networks:
   catalog:
+  chat:
+  notification:
+  transaction:
+  wallet:
+  user:
 
 volumes:
   catalog:
+  chat:
+  notification:
+  transaction:
+  wallet:
+  user:

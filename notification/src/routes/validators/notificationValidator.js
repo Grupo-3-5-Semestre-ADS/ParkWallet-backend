@@ -13,6 +13,6 @@ export default yup
       .min(4, "Message too short (text)")
       .required("Required (text)"),
     receivedByTheUser: yup
-      .boolean
+      .boolean()
       .required("Required (receivedByTheUser)")
   })

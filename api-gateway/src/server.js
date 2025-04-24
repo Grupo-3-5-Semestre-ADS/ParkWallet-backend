@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/', routes);
 app.use('/', swagger);
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const SERVER_PORT = process.env.SERVER_PORT || 8080;
+app.listen(SERVER_PORT, () => {
+  console.log(`Server running on port ${SERVER_PORT}`);
 });
