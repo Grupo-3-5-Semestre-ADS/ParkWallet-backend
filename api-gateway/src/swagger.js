@@ -7,14 +7,14 @@ const router = express.Router();
 
 dotenv.config();
 
-const catalogUrl = `http://${process.env.CATALOG_HOST}:${process.env.CATALOG_PORT}`
-const chatUrl = `http://${process.env.CHAT_HOST}:${process.env.CHAT_PORT}`
-const notificationUrl = `http://${process.env.NOTIFICATION_HOST}:${process.env.NOTIFICATION_PORT}`
-const transactionUrl = `http://${process.env.TRANSACTION_HOST}:${process.env.TRANSACTION_PORT}`
-const walletUrl = `http://${process.env.WALLET_HOST}:${process.env.WALLET_PORT}`
-const userUrl = `http://${process.env.USER_HOST}:${process.env.USER_PORT}`
+const catalogUrl = `http://${process.env.CATALOG_HOST}:${process.env.CATALOG_PORT}`;
+const chatUrl = `http://${process.env.CHAT_HOST}:${process.env.CHAT_PORT}`;
+const notificationUrl = `http://${process.env.NOTIFICATION_HOST}:${process.env.NOTIFICATION_PORT}`;
+const transactionUrl = `http://${process.env.TRANSACTION_HOST}:${process.env.TRANSACTION_PORT}`;
+const walletUrl = `http://${process.env.WALLET_HOST}:${process.env.WALLET_PORT}`;
+const userUrl = `http://${process.env.USER_HOST}:${process.env.USER_PORT}`;
 
-const swaggerEndpoint = "/swagger/swagger.json"
+const swaggerEndpoint = "/swagger/swagger.json";
 
 const swaggerSources = {
     catalog: `${catalogUrl}${swaggerEndpoint}`,
@@ -24,6 +24,16 @@ const swaggerSources = {
     wallet: `${walletUrl}${swaggerEndpoint}`,
     user: `${userUrl}${swaggerEndpoint}`,
 };
+
+const commonSchemaNames = new Set([
+    'Unauthorized',
+    'NotFound',
+    'InternalServerError',
+    'PaymentRequired',
+    'Page',
+    'HateoasLink',
+]);
+
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -40,7 +50,6 @@ function updateRefs(obj, mapping) {
         }
     }
 }
-
 
 async function getCombinedSwagger() {
     const base = {
@@ -64,23 +73,35 @@ async function getCombinedSwagger() {
         tags: [],
     };
 
+    const addedCommonSchemas = new Set();
+
     for (const [serviceName, url] of Object.entries(swaggerSources)) {
         console.log(`Attempting to fetch Swagger for ${serviceName} from ${url}`);
         try {
             const {data} = await axios.get(url);
-
             const componentMappings = {};
+
             if (data.components) {
                 for (const componentType in data.components) {
                     if (!base.components[componentType]) {
                         base.components[componentType] = {};
                     }
-                    for (const componentName in data.components[componentType]) {
-                        const newComponentName = `${capitalizeFirstLetter(serviceName)}${componentName}`;
-                        const originalRef = `#/components/${componentType}/${componentName}`;
-                        const newRef = `#/components/${componentType}/${newComponentName}`;
 
-                        base.components[componentType][newComponentName] = data.components[componentType][componentName];
+                    for (const componentName in data.components[componentType]) {
+                        const originalRef = `#/components/${componentType}/${componentName}`;
+                        let newComponentName = componentName;
+                        let newRef = originalRef;
+
+                        if (componentType === 'schemas' && commonSchemaNames.has(componentName)) {
+                            if (!addedCommonSchemas.has(componentName)) {
+                                base.components[componentType][componentName] = data.components[componentType][componentName];
+                                addedCommonSchemas.add(componentName);
+                            }
+                        } else {
+                            newComponentName = `${capitalizeFirstLetter(serviceName)}${componentName}`;
+                            newRef = `#/components/${componentType}/${newComponentName}`;
+                            base.components[componentType][newComponentName] = data.components[componentType][componentName];
+                        }
                         componentMappings[originalRef] = newRef;
                     }
                 }
@@ -95,25 +116,28 @@ async function getCombinedSwagger() {
             }
 
 
+            let serviceTagsMap = {};
             if (data.tags) {
-                base.tags.push(
-                    ...data.tags.map(tag => ({
-                        ...tag,
-                        name: `${serviceName} - ${tag.name}`,
-                    }))
+                const prefixedTags = data.tags.map(tag => {
+                    const prefixedName = `${serviceName} - ${tag.name}`;
+                    serviceTagsMap[tag.name] = prefixedName;
+                    return {...tag, name: prefixedName};
+                });
+                base.tags.push(...prefixedTags);
+                base.tags = base.tags.filter((tag, index, self) =>
+                    index === self.findIndex((t) => t.name === tag.name)
                 );
             }
 
-            for (const pathItem of Object.values(base.paths)) {
-                for (const operation of Object.values(pathItem)) {
-                    if (operation.tags && Array.isArray(operation.tags)) {
-                        operation.tags = operation.tags.map(tagName => {
-                            const originalTag = data.tags?.find(t => t.name === tagName);
-                            if (originalTag) {
-                                return `${serviceName} - ${tagName}`;
-                            }
-                            return tagName;
-                        }).filter((value, index, self) => self.indexOf(value) === index);
+            for (const path in data.paths) {
+                if (base.paths[path]) {
+                    for (const method in base.paths[path]) {
+                        const operation = base.paths[path][method];
+                        if (operation.tags && Array.isArray(operation.tags)) {
+                            operation.tags = operation.tags
+                                .map(tagName => serviceTagsMap[tagName] || tagName)
+                                .filter((value, index, self) => self.indexOf(value) === index);
+                        }
                     }
                 }
             }
@@ -139,7 +163,6 @@ async function getCombinedSwagger() {
         }
     }
 
-
     return base;
 }
 
@@ -153,7 +176,6 @@ router.use('/swagger-ui', swaggerUi.serve, async (req, res, next) => {
         swaggerUi.setup(swaggerDocument)(req, res, next);
     } catch (error) {
         console.error("Error in swagger-ui route handler:", error);
-        next(error);
     }
 });
 
