@@ -13,35 +13,57 @@ const transactionUrl = `http://${process.env.TRANSACTION_HOST}:${process.env.TRA
 const walletUrl = `http://${process.env.WALLET_HOST}:${process.env.WALLET_PORT}`;
 const userUrl = `http://${process.env.USER_HOST}:${process.env.USER_PORT}`;
 
-
-const resolveProxyPath = (serviceName, targetUrl) => (req) => {
-    const targetPath = req.url;
-    console.log(`Proxying [${req.method}] ${req.originalUrl} to ${serviceName} (${targetUrl}${targetPath})`);
-    return targetPath;
+const serviceRegistry = {
+    products: catalogUrl,
+    facilities: catalogUrl,
+    chats: chatUrl,
+    notifications: notificationUrl,
+    transactions: transactionUrl,
+    itemsTransaction: transactionUrl,
+    wallets: walletUrl,
+    users: userUrl,
+    roles: userUrl,
+    auth: userUrl,
 };
 
-router.use('/catalog', proxy(catalogUrl, {
-    proxyReqPathResolver: resolveProxyPath('Catalog', catalogUrl)
-}));
+router.use('/api', (req, res, next) => {
+    const pathSegments = req.path.split('/').filter(Boolean);
 
-router.use('/chat', proxy(chatUrl, {
-    proxyReqPathResolver: resolveProxyPath('Chat', chatUrl)
-}));
+    if (pathSegments.length === 0) {
+        return res.status(404).send('Endpoint API raiz não encontrado.');
+    }
 
-router.use('/notification', proxy(notificationUrl, {
-    proxyReqPathResolver: resolveProxyPath('Notification', notificationUrl)
-}));
+    const resource = pathSegments[0];
+    const targetUrl = serviceRegistry[resource];
 
-router.use('/transaction', proxy(transactionUrl, {
-    proxyReqPathResolver: resolveProxyPath('Transaction', transactionUrl)
-}));
+    if (!targetUrl) {
+        console.log(`Gateway: Nenhum serviço registrado para o recurso "${resource}" em ${req.originalUrl}`);
+        return res.status(404).send('Endpoint API não encontrado.');
+    }
 
-router.use('/wallet', proxy(walletUrl, {
-    proxyReqPathResolver: resolveProxyPath('Wallet', walletUrl)
-}));
+    const proxyOptions = {
+        proxyReqPathResolver: (request) => {
+            const targetPath = `/api${request.url}`;
+            console.log(`Gateway: Proxying [${req.method}] ${req.originalUrl} -> ${targetUrl}${targetPath}`);
+            return targetPath;
+        },
+        proxyErrorHandler: (err, proxyRes, nextFn) => {
+            console.error(`Gateway: Erro no proxy para ${targetUrl}${req.path}:`, err.code || err.message);
+            if (!proxyRes.headersSent) {
+                nextFn(err);
+            }
+        }
+    };
 
-router.use('/user', proxy(userUrl, {
-    proxyReqPathResolver: resolveProxyPath('User', userUrl)
-}));
+    proxy(targetUrl, proxyOptions)(req, res, next);
+});
+
+router.use((req, res) => {
+    if (!res.headersSent) {
+        console.log(`Gateway: Rota não encontrada [${req.method}] ${req.originalUrl}`);
+        res.status(404).send('Recurso não encontrado no Gateway.');
+    }
+});
+
 
 export default router;

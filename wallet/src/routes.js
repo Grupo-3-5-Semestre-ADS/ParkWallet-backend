@@ -15,7 +15,7 @@ routes.use(hateoas);
 routes.use(handlers);
 routes.use(order);
 
-routes.use("/api/wallet", /*verify,*/ walletRouter);
+routes.use("/api/wallets", /*verify,*/ walletRouter);
 
 routes.use(InternalServerError)
 routes.use(NotFound)

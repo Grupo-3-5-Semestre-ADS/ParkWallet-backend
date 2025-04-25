@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/api/chat/": {
+    "/api/chats/": {
       "get": {
         "tags": [
           "Chats"
@@ -155,7 +155,7 @@
         }
       }
     },
-    "/api/chat/{id}": {
+    "/api/chats/{id}": {
       "get": {
         "tags": [
           "Chats"

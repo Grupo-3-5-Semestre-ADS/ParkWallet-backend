@@ -15,7 +15,7 @@ routes.use(hateoas);
 routes.use(handlers);
 routes.use(order);
 
-routes.use("/api/notification", /*verify,*/ notificationRouter);
+routes.use("/api/notifications", /*verify,*/ notificationRouter);
 
 routes.use(InternalServerError)
 routes.use(NotFound)

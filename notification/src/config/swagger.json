@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/api/notification/": {
+    "/api/notifications/": {
       "get": {
         "tags": [
           "Notifications"
@@ -155,7 +155,7 @@
         }
       }
     },
-    "/api/notification/{id}": {
+    "/api/notifications/{id}": {
       "get": {
         "tags": [
           "Notifications"

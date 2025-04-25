@@ -14,8 +14,8 @@ app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 
-app.use('/', routes);
 app.use('/', swagger);
+app.use('/', routes);
 
 const SERVER_PORT = process.env.SERVER_PORT || 8080;
 app.listen(SERVER_PORT, () => {

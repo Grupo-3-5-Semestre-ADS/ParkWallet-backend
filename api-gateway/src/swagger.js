@@ -88,10 +88,9 @@ async function getCombinedSwagger() {
 
             if (data.paths) {
                 for (const [path, methods] of Object.entries(data.paths)) {
-                    const newPath = `/${serviceName}${path}`;
                     const updatedMethods = JSON.parse(JSON.stringify(methods));
                     updateRefs(updatedMethods, componentMappings);
-                    base.paths[newPath] = updatedMethods;
+                    base.paths[path] = updatedMethods;
                 }
             }
 

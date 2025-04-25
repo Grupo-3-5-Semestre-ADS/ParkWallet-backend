@@ -15,7 +15,7 @@ routes.use(hateoas);
 routes.use(handlers);
 routes.use(order);
 
-routes.use("/api/chat", /*verify,*/ chatRouter);
+routes.use("/api/chats", /*verify,*/ chatRouter);
 
 routes.use(InternalServerError)
 routes.use(NotFound)

@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/api/wallet/": {
+    "/api/wallets/": {
       "get": {
         "tags": [
           "Wallets"
@@ -155,7 +155,7 @@
         }
       }
     },
-    "/api/wallet/{id}": {
+    "/api/wallets/{id}": {
       "get": {
         "tags": [
           "Wallets"
