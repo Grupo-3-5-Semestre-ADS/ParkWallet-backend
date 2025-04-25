@@ -16,7 +16,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "_page",
@@ -81,78 +81,12 @@
               }
             }
           }
-        }
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "402": {
-            "description": "Payment Required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
         },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateUser"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateUser"
-              }
-            }
+        "security": [
+          {
+            "bearerAuth": {}
           }
-        }
+        ]
       }
     },
     "/api/users/{id}": {
@@ -160,7 +94,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -220,13 +154,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       },
       "put": {
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -302,6 +241,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -322,7 +266,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -382,12 +326,20 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       }
     },
     "/api/users/{id}/roles": {
       "get": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -429,13 +381,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       },
       "post": {
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -496,6 +453,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -513,7 +475,10 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -555,7 +520,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       }
     },
     "/api/roles/": {
@@ -563,7 +533,7 @@
         "tags": [
           "Roles"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "responses": {
           "200": {
             "description": "OK"
@@ -598,13 +568,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       },
       "post": {
         "tags": [
           "Roles"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "responses": {
           "200": {
             "description": "OK"
@@ -655,6 +630,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -677,7 +657,7 @@
         "tags": [
           "Roles"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -737,13 +717,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       },
       "put": {
         "tags": [
           "Roles"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -819,6 +804,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -839,7 +829,7 @@
         "tags": [
           "Roles"
         ],
-        "description": "",
+        "description": "Verifies the JWT token in the request header.",
         "parameters": [
           {
             "name": "id",
@@ -884,6 +874,154 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalServerError"
                 }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Verifies the JWT token in the request header.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Verifies the JWT token in the request header.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentRequired"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentRequired"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateUser"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateUser"
               }
             }
           }

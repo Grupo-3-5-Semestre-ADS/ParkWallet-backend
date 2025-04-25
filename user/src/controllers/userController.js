@@ -46,7 +46,7 @@ export const listUsers = async (req, res, next) => {
 
 export const createUser = async (req, res, next) => {
   /*
-  #swagger.tags = ["Users"]
+  #swagger.tags = ["Auth"]
   #swagger.requestBody = {
     required: true,
     schema: { $ref: "#/definitions/CreateOrUpdateUser" }

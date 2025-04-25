@@ -3,12 +3,15 @@ import { Router } from 'express';
 import order from "./middlewares/order.js";
 import hateoas from "./middlewares/hateoas.js";
 import handlers from "./middlewares/handlers.js";
+import { verify } from './middlewares/jwt.js';
 
 import InternalServerError from './routes/helper/500.js';
 import NotFound from './routes/helper/404.js';
 
 import userRouter from "./routes/userRouter.js";
 import roleRouter from "./routes/roleRouter.js";
+import authRouter from './routes/authRouter.js';
+
 // import {verify} from "./controllers/authController.js";
 
 const routes = Router();
@@ -23,8 +26,10 @@ routes.use(order);
 // routes.use("/api/roles", verify, roleRouter);
 
 // Por enquanto, sem verificação
-routes.use("/api/users", userRouter);
-routes.use("/api/roles", roleRouter);
+
+routes.use('/api/users', verify, userRouter);
+routes.use('/api/roles', verify, roleRouter);
+routes.use('/api/auth', authRouter);
 
 // Tratamento de erros
 routes.use(InternalServerError);

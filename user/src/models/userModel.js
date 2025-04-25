@@ -23,7 +23,7 @@ const User = database.sequelize.define(
     cpf: {
       type: DataTypes.STRING,
       allowNull: false,
-      required: true,
+      required: false,
       unique: true,
     },
     password: {
