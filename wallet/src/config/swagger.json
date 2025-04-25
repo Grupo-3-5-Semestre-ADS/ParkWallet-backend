@@ -7,11 +7,11 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8082"
+      "url": "http://localhost:8080"
     }
   ],
   "paths": {
-    "/api/transactions/": {
+    "/api/wallet/": {
       "get": {
         "tags": [
           "Wallets"
@@ -155,7 +155,7 @@
         }
       }
     },
-    "/api/transactions/{id}": {
+    "/api/wallet/{id}": {
       "get": {
         "tags": [
           "Wallets"

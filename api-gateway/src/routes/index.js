@@ -6,53 +6,42 @@ const router = express.Router();
 
 dotenv.config();
 
-const catalogUrl = `${process.env.CATALOG_HOST}:${process.env.CATALOG_PORT}`
-const chatUrl = `${process.env.CHAT_HOST}:${process.env.CHAT_PORT}`
-const notificationUrl = `${process.env.NOTIFICATION_HOST}:${process.env.NOTIFICATION_PORT}`
-const transactionUrl = `${process.env.TRANSACTION_HOST}:${process.env.TRANSACTION_PORT}`
-const walletUrl = `${process.env.WALLET_HOST}:${process.env.WALLET_PORT}`
-const userUrl = `${process.env.USER_HOST}:${process.env.USER_PORT}`
+const catalogUrl = `http://${process.env.CATALOG_HOST}:${process.env.CATALOG_PORT}`;
+const chatUrl = `http://${process.env.CHAT_HOST}:${process.env.CHAT_PORT}`;
+const notificationUrl = `http://${process.env.NOTIFICATION_HOST}:${process.env.NOTIFICATION_PORT}`;
+const transactionUrl = `http://${process.env.TRANSACTION_HOST}:${process.env.TRANSACTION_PORT}`;
+const walletUrl = `http://${process.env.WALLET_HOST}:${process.env.WALLET_PORT}`;
+const userUrl = `http://${process.env.USER_HOST}:${process.env.USER_PORT}`;
+
+
+const resolveProxyPath = (serviceName, targetUrl) => (req) => {
+    const targetPath = req.url;
+    console.log(`Proxying [${req.method}] ${req.originalUrl} to ${serviceName} (${targetUrl}${targetPath})`);
+    return targetPath;
+};
 
 router.use('/catalog', proxy(catalogUrl, {
-    proxyReqPathResolver: (req) => {
-        console.log(req.url)
-        return `/api${req.url}`;
-    }
+    proxyReqPathResolver: resolveProxyPath('Catalog', catalogUrl)
 }));
 
 router.use('/chat', proxy(chatUrl, {
-    proxyReqPathResolver: (req) => {
-        console.log(req.url)
-        return `/api${req.url}`;
-    }
+    proxyReqPathResolver: resolveProxyPath('Chat', chatUrl)
 }));
 
 router.use('/notification', proxy(notificationUrl, {
-    proxyReqPathResolver: (req) => {
-        console.log(req.url)
-        return `/api${req.url}`;
-    }
+    proxyReqPathResolver: resolveProxyPath('Notification', notificationUrl)
 }));
 
 router.use('/transaction', proxy(transactionUrl, {
-    proxyReqPathResolver: (req) => {
-        console.log(req.url)
-        return `/api${req.url}`;
-    }
+    proxyReqPathResolver: resolveProxyPath('Transaction', transactionUrl)
 }));
 
 router.use('/wallet', proxy(walletUrl, {
-    proxyReqPathResolver: (req) => {
-        console.log(req.url)
-        return `/api${req.url}`;
-    }
+    proxyReqPathResolver: resolveProxyPath('Wallet', walletUrl)
 }));
 
 router.use('/user', proxy(userUrl, {
-    proxyReqPathResolver: (req) => {
-        console.log(req.url)
-        return `/api${req.url}`;
-    }
+    proxyReqPathResolver: resolveProxyPath('User', userUrl)
 }));
 
 export default router;
