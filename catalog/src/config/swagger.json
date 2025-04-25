@@ -385,7 +385,7 @@
         }
       }
     },
-    "/api/facility/": {
+    "/api/facilities/": {
       "get": {
         "tags": [
           "Facilities"
@@ -529,7 +529,7 @@
         }
       }
     },
-    "/api/facility/{id}/products": {
+    "/api/facilities/{id}/products": {
       "get": {
         "tags": [
           "Facilities"
@@ -597,7 +597,7 @@
         }
       }
     },
-    "/api/facility/{id}": {
+    "/api/facilities/{id}": {
       "get": {
         "tags": [
           "Facilities"

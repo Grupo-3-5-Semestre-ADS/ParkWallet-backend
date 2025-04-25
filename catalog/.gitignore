@@ -8,6 +8,7 @@ npm-debug.log*
 
 # Dependency
 ../node_modules
+/node_modules
 
 # Environment
 .env

@@ -17,7 +17,7 @@ routes.use(handlers);
 routes.use(order);
 
 routes.use("/api/products", /*verify,*/ productRouter);
-routes.use("/api/facility", /*verify,*/ facilityRouter);
+routes.use("/api/facilities", /*verify,*/ facilityRouter);
 
 routes.use(InternalServerError)
 routes.use(NotFound)
