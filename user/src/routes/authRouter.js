@@ -3,6 +3,7 @@ import { generateToken } from '../middlewares/jwt.js';
 import { User } from '../models/index.js';
 import validator from '../middlewares/validator.js';
 import schema from './validators/userValidator.js';
+import bcrypt from 'bcryptjs';
 const router = Router();
 import {
     createUser
@@ -12,10 +13,12 @@ router.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.scope('withPassword').findOne({ where: { email } });
+  
+    const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
 
-    if (!user || user.password !== password) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+    if (!isPasswordValid) {
+      return res.unauthorized();
     }
 
     const token = generateToken(user);
