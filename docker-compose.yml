@@ -127,22 +127,24 @@ services:
     networks:
       - wallet
 
-  # user-api:
-  #   build:
-  #     context: ./user
-  #     dockerfile: Dockerfile
-  #   container_name: user-api
-  #   environment:
-  #     SERVER_PORT: 8080
-  #     MYSQL_DATABASE: user
-  #     MYSQL_USER: root
-  #     MYSQL_PASSWORD: root
-  #     MYSQL_HOST: user-db
-  #   depends_on:
-  #     user-db:
-  #       condition: service_healthy
-  #   networks:
-  #     - user
+  user-api:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    container_name: user-api
+    environment:
+      SERVER_PORT: 8080
+      MYSQL_DATABASE: user
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_HOST: user-db
+      JWT_SECRET: secret
+      JWT_EXPIRATION_TIME: 10h
+    depends_on:
+      user-db:
+        condition: service_healthy
+    networks:
+      - user
 
   # Databases
   catalog-db:
