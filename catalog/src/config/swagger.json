@@ -40,7 +40,7 @@
             }
           },
           {
-            "name": "filter",
+            "name": "activesOnly",
             "in": "query",
             "schema": {
               "type": "string"
@@ -317,8 +317,10 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/products/{id}/toggle-status": {
+      "patch": {
         "tags": [
           "Products"
         ],

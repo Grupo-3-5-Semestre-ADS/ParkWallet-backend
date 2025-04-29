@@ -40,7 +40,7 @@
             }
           },
           {
-            "name": "filter",
+            "name": "activesOnly",
             "in": "query",
             "schema": {
               "type": "string"
@@ -385,8 +385,10 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/transactions/{id}/toggle-status": {
+      "patch": {
         "tags": [
           "Transactions"
         ],
@@ -476,13 +478,6 @@
           },
           {
             "name": "_order",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "filter",
             "in": "query",
             "schema": {
               "type": "string"
