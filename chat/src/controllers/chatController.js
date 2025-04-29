@@ -29,11 +29,11 @@ export const listChats = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {_page = 1, _size = 10, _order = 'id', ...filter} = req.query;
-    const offset = (_page - 1) * _size;
+    const {_page = "1", _size = "10", _order = 'id'} = req.query;
+    const offset = (parseInt(_page) - 1) * _size;
 
     const {rows: chats, count: totalItems} = await Chat.findAndCountAll({
-      where: filter,
+      where: {},
       offset,
       limit: parseInt(_size),
       order: [[_order, 'ASC']],

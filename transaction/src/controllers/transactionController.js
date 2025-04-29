@@ -29,11 +29,12 @@ export const listTransactions = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {_page = 1, _size = 10, _order = 'id', ...filter} = req.query;
-    const offset = (_page - 1) * _size;
+    const {_page = "1", _size = "10", _order = 'id', activesOnly = "false"} = req.query;
+    const offset = (parseInt(_page) - 1) * _size;
+    const where = activesOnly === "true" ? {inactive: false} : {};
 
     const {rows: transactions, count: totalItems} = await Transaction.findAndCountAll({
-      where: filter,
+      where,
       offset,
       limit: parseInt(_size),
       order: [[_order, 'ASC']],
@@ -130,8 +131,7 @@ export const editTransaction = async (req, res, next) => {
   }
 };
 
-// TODO change this to an inactivation function
-export const deleteTransaction = async (req, res, next) => {
+export const toggleTransactionStatus = async (req, res, next) => {
   /*
   #swagger.tags = ["Transactions"]
   #swagger.responses[204]
@@ -148,9 +148,11 @@ export const deleteTransaction = async (req, res, next) => {
       return res.notFoundResponse();
     }
 
-    await transaction.destroy();
+    await transaction.update({
+      inactive: !transaction.inactive,
+    });
 
-    res.noContentResponse();
+    res.okResponse();
   } catch (err) {
     next(err);
   }

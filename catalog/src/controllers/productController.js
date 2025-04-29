@@ -29,11 +29,12 @@ export const listProducts = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {_page = 1, _size = 10, _order = 'id', ...filter} = req.query;
-    const offset = (_page - 1) * _size;
+    const {_page = "1", _size = "10", _order = 'id', activesOnly = "false"} = req.query;
+    const offset = (parseInt(_page) - 1) * _size;
+    const where = activesOnly === "true" ? {inactive: false} : {};
 
     const {rows: products, count: totalItems} = await Product.findAndCountAll({
-      where: filter,
+      where,
       offset,
       limit: parseInt(_size),
       order: [[_order, 'ASC']],
@@ -101,7 +102,7 @@ export const editProduct = async (req, res, next) => {
   }
 };
 
-export const deleteProduct = async (req, res, next) => {
+export const toggleProductStatus = async (req, res, next) => {
   /*
   #swagger.tags = ["Products"]
   #swagger.responses[204]
@@ -118,9 +119,11 @@ export const deleteProduct = async (req, res, next) => {
       return res.notFoundResponse();
     }
 
-    await product.destroy();
+    await product.update({
+      inactive: !product.inactive,
+    });
 
-    res.noContentResponse();
+    res.okResponse();
   } catch (err) {
     next(err);
   }

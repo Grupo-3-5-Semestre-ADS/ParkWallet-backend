@@ -3,11 +3,11 @@ import validator from "../middlewares/validator.js";
 import schema from "./validators/transactionValidator.js";
 import {
   createTransaction,
-  deleteTransaction,
+  toggleTransactionStatus,
   editTransaction,
   listItemsByTransaction,
   listTransactions,
-  showTransaction
+  showTransaction,
 } from "../controllers/transactionController.js";
 
 const router = Router()
@@ -17,6 +17,6 @@ router.get('/:id/items', listItemsByTransaction)
 router.get('/:id', showTransaction)
 router.post('/', validator(schema), createTransaction)
 router.put('/:id', validator(schema), editTransaction)
-router.delete('/:id', deleteTransaction)
+router.patch('/:id/toggle-status', toggleTransactionStatus)
 
 export default router

@@ -3,7 +3,7 @@ import validator from "../middlewares/validator.js";
 import schema from "./validators/facilityValidator.js";
 import {
   createFacility,
-  deleteFacility,
+  toggleFacilityStatus,
   editFacility,
   listFacilities,
   listProductsByFacility,
@@ -17,6 +17,6 @@ router.get('/:id/products', listProductsByFacility)
 router.get('/:id', showFacility)
 router.post('/', validator(schema), createFacility)
 router.put('/:id', validator(schema), editFacility)
-router.delete('/:id', deleteFacility)
+router.patch('/:id/toggle-status', toggleFacilityStatus)
 
 export default router

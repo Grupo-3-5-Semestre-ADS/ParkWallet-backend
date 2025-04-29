@@ -414,7 +414,7 @@
             }
           },
           {
-            "name": "filter",
+            "name": "activesOnly",
             "in": "query",
             "schema": {
               "type": "string"
@@ -759,8 +759,10 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/facilities/{id}/toggle-status": {
+      "patch": {
         "tags": [
           "Facilities"
         ],
