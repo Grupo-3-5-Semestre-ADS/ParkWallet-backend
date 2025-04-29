@@ -937,10 +937,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": {
+                  "password": {
                     "example": "any"
                   },
-                  "password": {
+                  "email": {
                     "example": "any"
                   }
                 }
