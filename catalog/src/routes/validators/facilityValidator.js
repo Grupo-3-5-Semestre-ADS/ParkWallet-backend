@@ -29,8 +29,5 @@ export default yup
       .typeError("Must be a number (longitude)")
       .min(-180, "Invalid longitude (min is -180)")
       .max(180, "Invalid longitude (max is 180)")
-      .required("Required (longitude)"),
-    inactive: yup
-      .boolean()
-      .optional()
+      .required("Required (longitude)")
   })

@@ -1,8 +1,8 @@
 import httpStatus from "http-status";
 
 export default (req, res, next) => {
-  res.createdResponse = () => {
-    res.status(httpStatus.CREATED).send();
+  res.createdResponse = (data) => {
+    res.status(httpStatus.CREATED).json(data);
   }
 
   res.okResponse = (data) => {

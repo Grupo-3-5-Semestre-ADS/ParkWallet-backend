@@ -85,15 +85,16 @@ export const createFacility = async (req, res, next) => {
   try {
     const {name, description, type, latitude, longitude} = req.body;
 
-    await Facility.create({
+    const createdFacility = await Facility.create({
       name,
       description,
       type,
       latitude,
-      longitude
+      longitude,
+      inactive: false
     });
 
-    res.createdResponse();
+    res.createdResponse(createdFacility);
   } catch (err) {
     next(err);
   }
