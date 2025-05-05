@@ -1,81 +1,84 @@
 import { DataTypes } from 'sequelize';
-import database from '../config/database.js';
+import db from '../config/database.js';
 import bcrypt from 'bcryptjs';
-const User = database.sequelize.define(
-  'User',
-  {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      required: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      required: true,
-      unique: true,
-      validate: {
-        isEmail: {
-          msg: 'Email inválido.',
-        },
-      },
-    },
-    cpf: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      required: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      required: true,
-      validate: {
-        len: {
-          args: [8, 255],
-          msg: 'A senha deve ter no mínimo 8 caracteres.',
-        },
-        is: {
-          args: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-          msg: 'A senha deve conter letras e números.',
-        },
-      },
-    },
-    birthdate: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-      required: true,
-    },
-    inactive: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
+
+const User = db.sequelize.define('User', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
     },
   },
-  {
-    tableName: 'users',
-    timestamps: true,
-    hooks: {
-      beforeCreate: async (user) => {
-        if (user.password) {
-          user.password = await bcrypt.hash(user.password, 10);
-        }
-      },
-      beforeUpdate: async (user) => {
-        if (user.changed('password')) {
-          user.password = await bcrypt.hash(user.password, 10);
-        }
-      },
-    },
+  cpf: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  birthdate: {
+    type: DataTypes.DATEONLY,
+    allowNull: false,
+  },
+  active: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
+}, {
+  tableName: 'users',
+  timestamps: true,
+  paranoid: true,
+  scopes: {
     defaultScope: {
-      attributes: { exclude: ['password'] },
+      where: { active: true },
+      attributes: { exclude: ['password'] }
     },
-    scopes: {
-      withPassword: {
-        attributes: {},
-      },
+    withPassword: {
+      attributes: { include: ['password'] },
     },
+    withoutPassword: {
+      attributes: { exclude: ['password'] }
+    },
+    active: {
+      where: { active: true }
+    },
+    inactive: {
+      where: { active: false }
+    },
+    all: {
+      where: {}
+    },
+    public: {
+      attributes: ['id', 'name', 'email', 'createdAt']
+    }
+  },
+  hooks: {
+    beforeCreate: async (user) => {
+      if (user.password) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+      }
+    },
+    beforeUpdate: async (user) => {
+      if (user.changed('password')) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+      }
+    }
   }
-);
+});
+
+User.prototype.comparePassword = async function(candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
 
 export default User;

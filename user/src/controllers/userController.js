@@ -1,20 +1,53 @@
 import { User, Role } from '../models/index.js';
 
+export const login = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Login"]
+  #swagger.responses[200]
+  #swagger.responses[401]
+  */
+  const { email, password } = req.body;
+
+  const user = await User.scope('withPassword').findOne({
+    where: { email }
+  });
+
+  if (!user) {
+    return res.unauthorized();
+  }
+
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    return res.unauthorized();
+  }
+
+  const roles = await user.getRoles({ attributes: ['name'] });
+
+  req.user = {
+    id: user.id,
+    email: user.email,
+    roles: roles.map(role => role.name),
+  };
+
+  next();
+};
+
+
 export const showUser = async (req, res, next) => {
   /*
   #swagger.tags = ["Users"]
   #swagger.responses[200]
-  #swagger.responses[404] = {
-    schema: { $ref: "#/definitions/NotFound" }
-  }
   */
   try {
     const { id } = req.params;
-    const user = await User.findByPk(id, { include: ['roles'] });
+
+    const user = await User.findByPk(id, {
+      include: [{ association: 'roles' }],
+    });
 
     if (!user) return res.notFoundResponse();
 
-    res.hateoas_item(user);
+    return res.hateoas_item(user);
   } catch (err) {
     next(err);
   }
@@ -22,58 +55,47 @@ export const showUser = async (req, res, next) => {
 
 export const listUsers = async (req, res, next) => {
   /*
-  #swagger.tags = ["Users"]
-  #swagger.responses[200]
+    #swagger.tags = ["Users"]
+    #swagger.responses[200]
   */
   try {
     const { _page = 1, _size = 10, _order = 'id', ...filter } = req.query;
-    const offset = (_page - 1) * _size;
+
+    const page = parseInt(_page) || 1;
+    const size = parseInt(_size) || 10;
+    const offset = (page - 1) * size;
+
+    const allowedFilters = ['email', 'name', 'cpf'];
+    const where = {};
+    for (const key of allowedFilters) {
+      if (filter[key]) where[key] = filter[key];
+    }
 
     const { rows: users, count: totalItems } = await User.findAndCountAll({
-      where: filter,
+      where,
       offset,
-      limit: parseInt(_size),
+      limit: size,
       order: [[_order, 'ASC']],
-      include: ['roles']
+      include: [{ association: 'roles' }]
     });
 
-    const totalPages = Math.ceil(totalItems / _size);
+    const totalPages = Math.ceil(totalItems / size);
     res.hateoas_list(users, totalPages);
   } catch (err) {
     next(err);
   }
 };
 
-export const createUser = async (req, res, next) => {
-  /*
-  #swagger.tags = ["Auth"]
-  #swagger.requestBody = {
-    required: true,
-    schema: { $ref: "#/definitions/CreateOrUpdateUser" }
-  }
-  #swagger.responses[200]
-  */
-  try {
-    const { name, email, cpf, password, birthdate, inactive } = req.body;
 
-    await User.create({ name, email, cpf, password, birthdate, inactive });
-    res.createdResponse();
-  } catch (err) {
-    next(err);
-  }
-};
 
 export const editUser = async (req, res, next) => {
   /*
   #swagger.tags = ["Users"]
   #swagger.requestBody = {
     required: true,
-    schema: { $ref: "#/definitions/CreateOrUpdateUser" }
+    schema: { $ref: "#/components/schemas/CreateOrUpdateUser" }
   }
   #swagger.responses[200]
-  #swagger.responses[404] = {
-    schema: { $ref: "#/definitions/NotFound" }
-  }
   */
   try {
     const { id } = req.params;
@@ -83,7 +105,12 @@ export const editUser = async (req, res, next) => {
 
     const { name, email, cpf, password, birthdate, inactive } = req.body;
 
-    await user.update({ name, email, cpf, password, birthdate, inactive });
+    const updates = { name, email, cpf, birthdate, inactive };
+    if (inactive !== undefined) updates.inactive = inactive;
+    if (password) updates.password = password;
+
+    await user.update(updates);
+
     res.hateoas_item(user);
   } catch (err) {
     next(err);
@@ -92,99 +119,28 @@ export const editUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   /*
-  #swagger.tags = ["Users"]
-  #swagger.responses[204]
-  #swagger.responses[404] = {
-    schema: { $ref: "#/definitions/NotFound" }
-  }
+    #swagger.tags = ["Users"]
+    #swagger.responses[204]
+    #swagger.responses[404] = {
+      description: "Usuário não encontrado",
+      schema: { $ref: "#/components/schemas/NotFound" }
+    }
   */
   try {
     const { id } = req.params;
+
     const user = await User.findByPk(id);
 
     if (!user) return res.notFoundResponse();
 
+    // Atualiza o status para inativo
+    await user.update({ active: false });
+
+    // Soft delete (paranoid)
     await user.destroy();
+
     res.noContentResponse();
   } catch (err) {
     next(err);
   }
 };
-
-// Adicionar um papel ao usuário
-export const addRoleToUser = async (req, res, next) => {
-  /*
-  #swagger.tags = ["Users"]
-  #swagger.requestBody = {
-    required: true,
-    schema: { roleId: 1 }
-  }
-  #swagger.responses[200]
-  #swagger.responses[404] = {
-    schema: { $ref: "#/definitions/NotFound" }
-  }
-  */
-  try {
-    const { id } = req.params;
-    const { roleId } = req.body;
-
-    const user = await User.findByPk(id);
-    const role = await Role.findByPk(roleId);
-
-    if (!user || !role) return res.notFoundResponse();
-
-    await user.addRole(role);
-    res.hateoas_item(user);
-  } catch (err) {
-    next(err);
-  }
-};
-
-// Listar papéis de um usuário
-export const listUserRoles = async (req, res, next) => {
-  /*
-  #swagger.tags = ["Users"]
-  #swagger.responses[200]
-  */
-  try {
-    const { id } = req.params;
-    const user = await User.findByPk(id);
-
-    if (!user) return res.notFoundResponse();
-
-    const roles = await user.getRoles();
-    res.hateoas_list(roles);
-  } catch (err) {
-    next(err);
-  }
-};
-
-// Remover um papel de um usuário
-export const removeRoleFromUser = async (req, res, next) => {
-  /*
-  #swagger.tags = ["Users"]
-  #swagger.requestBody = {
-    required: true,
-    schema: { roleId: 1 }
-  }
-  #swagger.responses[200]
-  #swagger.responses[404] = {
-    schema: { $ref: "#/definitions/NotFound" }
-  }
-  */
-  try {
-    const { id } = req.params;
-    const { roleId } = req.body;
-
-    const user = await User.findByPk(id);
-    const role = await Role.findByPk(roleId);
-
-    if (!user || !role) return res.notFoundResponse();
-
-    await user.removeRole(role);
-    res.hateoas_item(user);
-  } catch (err) {
-    next(err);
-  }
-};
-
