@@ -23,6 +23,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.7.0",
     "swagger-autogen": "^2.23.7"
   }
 }
