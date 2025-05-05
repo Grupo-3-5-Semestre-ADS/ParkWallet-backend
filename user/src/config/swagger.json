@@ -7,16 +7,175 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080"
+      "url": "http://localhost:8080",
+      "description": "Local server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Login",
+      "description": "Autenticação de usuários"
+    },
+    {
+      "name": "Register",
+      "description": "Registro de usuários"
+    },
+    {
+      "name": "Users",
+      "description": "Operações com usuários"
+    },
+    {
+      "name": "Roles",
+      "description": "Gerenciamento de papéis (roles)"
+    },
+    {
+      "name": "User Roles",
+      "description": "Atribuição e remoção de papéis de usuários"
     }
   ],
   "paths": {
+    "/login/": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentRequired"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentRequired"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register/": {
+      "post": {
+        "tags": [
+          "Register"
+        ],
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentRequired"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentRequired"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateUser"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateUser"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users/": {
       "get": {
         "tags": [
           "Users"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "parameters": [
           {
             "name": "_page",
@@ -94,7 +253,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -120,21 +279,6 @@
               "application/xml": {
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
                 }
               }
             }
@@ -165,7 +309,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -210,21 +354,6 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -266,7 +395,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -297,7 +426,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Usuário não encontrado",
             "content": {
               "application/json": {
                 "schema": {
@@ -334,65 +463,12 @@
         ]
       }
     },
-    "/api/users/{id}/roles": {
-      "get": {
+    "/api/users/{id}/add-roles": {
+      "patch": {
         "tags": [
-          "Auth"
+          "User Roles"
         ],
-        "description": "Verifies the JWT token in the request header.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -407,6 +483,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -418,21 +497,6 @@
               "application/xml": {
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
                 }
               }
             }
@@ -463,22 +527,28 @@
           "content": {
             "application/json": {
               "schema": {
-                "roleId": 1
+                "roles": [
+                  "admin",
+                  "editor"
+                ]
               }
             },
             "application/xml": {
               "schema": {
-                "roleId": 1
+                "roles": [
+                  "admin",
+                  "editor"
+                ]
               }
             }
           }
         }
-      },
-      "delete": {
-        "tags": [
-          "Auth"
-        ],
-        "description": "Verifies the JWT token in the request header.",
+      }
+    },
+    "/api/users/{id}/remove-roles": {
+      "patch": {
+        "tags": ["User Roles"],
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -533,7 +603,7 @@
         "tags": [
           "Roles"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
@@ -579,7 +649,7 @@
         "tags": [
           "Roles"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
@@ -640,12 +710,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "name": "admin"
+                "$ref": "#/components/schemas/Role"
               }
             },
             "application/xml": {
               "schema": {
-                "name": "admin"
+                "$ref": "#/components/schemas/Role"
               }
             }
           }
@@ -657,7 +727,7 @@
         "tags": [
           "Roles"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -683,21 +753,6 @@
               "application/xml": {
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
                 }
               }
             }
@@ -728,7 +783,7 @@
         "tags": [
           "Roles"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -773,21 +828,6 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFound"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -814,12 +854,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateRole"
+                "$ref": "#/components/schemas/Role"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateRole"
+                "$ref": "#/components/schemas/Role"
               }
             }
           }
@@ -829,7 +869,7 @@
         "tags": [
           "Roles"
         ],
-        "description": "Verifies the JWT token in the request header.",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -842,7 +882,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Role deletado com sucesso"
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized",
@@ -858,9 +898,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "Role não encontrado"
           },
           "500": {
             "description": "Internal Server Error",
@@ -884,156 +921,14 @@
           }
         ]
       }
-    },
-    "/api/auth/login": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "description": "Verifies the JWT token in the request header.",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "password": {
-                    "example": "any"
-                  },
-                  "email": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/auth/register": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "description": "Verifies the JWT token in the request header.",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "402": {
-            "description": "Payment Required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateUser"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrUpdateUser"
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
     "schemas": {
@@ -1041,8 +936,12 @@
         "type": "object",
         "properties": {
           "code": {
+            "type": "number",
+            "example": 401
+          },
+          "message": {
             "type": "string",
-            "example": "401"
+            "example": "Unauthorized"
           }
         },
         "xml": {
@@ -1053,12 +952,12 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "example": "404"
+            "type": "number",
+            "example": 404
           },
           "message": {
             "type": "string",
-            "example": ""
+            "example": "Resource not found"
           }
         },
         "xml": {
@@ -1069,12 +968,12 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "example": "500"
+            "type": "number",
+            "example": 500
           },
           "message": {
             "type": "string",
-            "example": ""
+            "example": "Internal server error"
           }
         },
         "xml": {
@@ -1085,12 +984,12 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "example": "402"
+            "type": "number",
+            "example": 402
           },
           "message": {
             "type": "string",
-            "example": ""
+            "example": "Payment required"
           }
         },
         "xml": {
@@ -1122,15 +1021,15 @@
         "properties": {
           "rel": {
             "type": "string",
-            "example": "rel"
+            "example": "self"
           },
           "href": {
             "type": "string",
-            "example": "/api/endpoint"
+            "example": "/api/example"
           },
           "method": {
             "type": "string",
-            "example": "METHOD"
+            "example": "GET"
           }
         },
         "xml": {
@@ -1142,23 +1041,23 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "id"
+            "example": "uuid"
           },
           "name": {
             "type": "string",
-            "example": "user name"
+            "example": "John Doe"
           },
           "email": {
             "type": "string",
-            "example": "user@example.com"
+            "example": "john@example.com"
           },
-          "password": {
+          "cpf": {
             "type": "string",
-            "example": "hashed_password"
+            "example": "12345678900"
           },
-          "roleId": {
-            "type": "number",
-            "example": 1
+          "birthdate": {
+            "type": "string",
+            "example": "1990-01-01"
           },
           "inactive": {
             "type": "boolean",
@@ -1171,6 +1070,18 @@
           "updatedAt": {
             "type": "string",
             "example": "2025-01-01T01:00:00.000Z"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "admin"
+                }
+              }
+            }
           },
           "_links": {
             "type": "array",
@@ -1191,19 +1102,23 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "user name"
+            "example": "John Doe"
           },
           "email": {
             "type": "string",
-            "example": "user@example.com"
+            "example": "john@example.com"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "12345678900"
           },
           "password": {
             "type": "string",
-            "example": "plain_password"
+            "example": "StrongPass123"
           },
-          "roleId": {
-            "type": "number",
-            "example": 1
+          "birthdate": {
+            "type": "string",
+            "example": "1990-01-01"
           },
           "inactive": {
             "type": "boolean",
@@ -1219,15 +1134,19 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "id"
+            "example": "uuid"
           },
           "name": {
             "type": "string",
-            "example": "role name"
+            "example": "admin"
           },
           "description": {
             "type": "string",
-            "example": "role description"
+            "example": "Administrator role"
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
           },
           "createdAt": {
             "type": "string",
@@ -1236,6 +1155,26 @@
           "updatedAt": {
             "type": "string",
             "example": "2025-01-01T01:00:00.000Z"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "uuid"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john@example.com"
+                }
+              }
+            }
           },
           "_links": {
             "type": "array",
@@ -1256,15 +1195,37 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "role name"
+            "example": "admin"
           },
           "description": {
             "type": "string",
-            "example": "role description"
+            "example": "Administrator role"
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
           }
         },
         "xml": {
           "name": "CreateOrUpdateRole"
+        }
+      },
+      "AssignRoles": {
+        "type": "object",
+        "properties": {
+          "roles": {
+            "type": "array",
+            "example": [
+              "admin",
+              "editor"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "xml": {
+          "name": "AssignRoles"
         }
       }
     }
