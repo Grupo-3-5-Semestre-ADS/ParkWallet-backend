@@ -9,10 +9,11 @@ import {createRequire} from "module";
 
 import database from "./config/database.js";
 import routes from "./routes.js";
+import { createDefaultAdmin } from './config/createDefaultAdmin.js';
 
 dotenv.config();
 database.connect();
-
+createDefaultAdmin();
 const app = express();
 const require = createRequire(import.meta.url);
 const swaggerFile = require('./config/swagger.json');

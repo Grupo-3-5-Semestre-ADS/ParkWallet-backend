@@ -13,7 +13,8 @@ export const createUserSchema = yup.object().shape({
   cpf: yup
     .string()
     .length(11, "CPF must be 11 digits")
-    .matches(/^\d+$/, "CPF must contain only digits"),
+    .matches(/^\d+$/, "CPF must contain only digits")
+    .optional(),
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -33,5 +34,5 @@ export const updateUserSchema = createUserSchema.shape({
     .min(8, "Password must be at least 8 characters")
     .matches(/[A-Za-z]/, "Password must contain letters")
     .matches(/\d/, "Password must contain numbers")
-    .optional(), // <- aqui a senha é opcional na edição
+    .optional(),
 });

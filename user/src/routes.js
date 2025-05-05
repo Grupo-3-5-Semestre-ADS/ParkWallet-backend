@@ -22,9 +22,9 @@ routes.use(handler);
 
 routes.use("/login", AuthRouter);
 routes.use("/register", RegisterRouter);
-routes.use("/api/users", verify, UserRouter);
-routes.use("/api/users", verify, UserRoleRouter);
-routes.use("/api/roles", verify, RoleRouter);
+routes.use("/api/users", /*verify,*/ UserRouter);
+routes.use("/api/users", /*verify,*/ UserRoleRouter);
+routes.use("/api/roles", /*verify,*/ RoleRouter);
 
 routes.use(InternalServerError);
 routes.use(NotFound);
