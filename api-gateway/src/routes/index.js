@@ -26,6 +26,14 @@ const serviceRegistry = {
     auth: userUrl,
 };
 
+router.post('/login', proxy(userUrl, {
+    proxyReqPathResolver: (req) => '/login'
+  }));
+  
+  router.post('/register', proxy(userUrl, {
+    proxyReqPathResolver: (req) => '/register'
+  }));
+
 router.use('/api', (req, res, next) => {
     const pathSegments = req.path.split('/').filter(Boolean);
 
