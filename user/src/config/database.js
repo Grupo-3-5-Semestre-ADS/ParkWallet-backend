@@ -33,6 +33,7 @@ if (dialect === 'mysql') {
     storage: './test.sqlite',
     logging: false,
   });
+
 }
 
 const connect = async () => {

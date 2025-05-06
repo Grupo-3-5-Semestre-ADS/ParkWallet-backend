@@ -1,4 +1,4 @@
-import { User } from '../models/index.js';
+import { User, Role } from '../models/index.js'; // Adicione a importação do modelo Role
 
 export const createDefaultAdmin = async () => {
   const adminEmail = 'admin@admin.com';
@@ -9,7 +9,13 @@ export const createDefaultAdmin = async () => {
     return;
   }
 
-  await User.create({
+  const adminRole = await Role.findOne({ where: { name: 'ADMIN' } });
+  if (!adminRole) {
+    console.log('Role Admin não encontrada.');
+    return;
+  }
+
+  const admin = await User.create({
     name: 'Admin',
     email: adminEmail,
     cpf: '00000000000',
@@ -17,6 +23,8 @@ export const createDefaultAdmin = async () => {
     birthdate: '1970-01-01',
     active: true
   });
+
+  await admin.addRole(adminRole);
 
   console.log('Usuário admin criado com sucesso.');
 };
