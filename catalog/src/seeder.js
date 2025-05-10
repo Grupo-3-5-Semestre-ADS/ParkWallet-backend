@@ -5,8 +5,8 @@ import Product from './models/productModel.js';
 
 dotenv.config();
 
-const NUM_FACILITIES = 30;
-const PRODUCTS_PER_FACILITY_MIN = 0;
+const NUM_FACILITIES = 50;
+const PRODUCTS_PER_FACILITY_MIN = 20;
 const PRODUCTS_PER_FACILITY_MAX = 20;
 
 const seedDatabase = async () => {

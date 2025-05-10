@@ -64,10 +64,9 @@ export const listItemsByTransaction = async (req, res, next) => {
       return res.notFoundResponse();
     }
 
-    // TODO add get of transaction items
-    // const products = await transaction.getItems();
+    const transactionItems = await transaction.getItemsTransaction();
 
-    res.hateoas_list(products);
+    res.hateoas_list(transactionItems);
   } catch (err) {
     next(err);
   }
