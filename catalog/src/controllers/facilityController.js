@@ -47,7 +47,6 @@ export const listFacilities = async (req, res, next) => {
   }
 };
 
-
 export const listProductsByFacility = async (req, res, next) => {
   /*
   #swagger.tags = ["Facilities"]
