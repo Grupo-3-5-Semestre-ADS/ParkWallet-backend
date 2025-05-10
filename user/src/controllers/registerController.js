@@ -20,6 +20,14 @@ export const createUser = async (req, res, next) => {
         birthdate,
         inactive
       });
+
+      const role = await Role.findOne({ where: { name: 'CUSTOMER' } });
+
+      if (!role) {
+        return res.status(404).json({ message: 'Role not found' });
+      }
+
+      await user.addRole(role);
   
       res.createdResponse();
     } catch (err) {
