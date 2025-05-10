@@ -1,4 +1,4 @@
-import {Product} from '../models/index.js';
+import {Facility, Product} from '../models/index.js';
 
 export const showProduct = async (req, res, next) => {
   /*
@@ -11,7 +11,12 @@ export const showProduct = async (req, res, next) => {
   try {
     const {id} = req.params;
 
-    const product = await Product.findByPk(id);
+    const product = await Product.findByPk(id, {
+      include: [{
+        model: Facility,
+        as: 'facility',
+      }]
+    });
 
     if (!product) {
       return res.notFoundResponse();
@@ -38,6 +43,10 @@ export const listProducts = async (req, res, next) => {
       offset,
       limit: parseInt(_size),
       order: [[_order, 'ASC']],
+      include: [{
+        model: Facility,
+        as: 'facility',
+      }]
     });
 
     const totalPages = Math.ceil(totalItems / _size);
