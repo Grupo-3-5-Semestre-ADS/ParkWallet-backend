@@ -15,8 +15,8 @@ export default yup
       .required("Required (recipientUserId)"),
     message: yup
       .string()
-      .min(4, "Message too short (message)")
-      .max(1000, "Message too long (message)")
+      .min(1, "Message too short (message)")
+      .max(5000, "Message too long (message)")
       .required("Required (message)"),
     wasRead: yup
       .boolean()
