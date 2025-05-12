@@ -20,7 +20,9 @@ await ensureDatabaseExists();
 const sequelize = new Sequelize(database, username, password, {
   host,
   dialect: 'mysql',
-  logging: false,
+  logging: (sql, timing) => { // Adicione esta forma para melhor formatação
+    console.log(`[SEQUELIZE QUERY] ${sql} [${timing}ms]`);
+  },
 });
 
 const connect = async () => {

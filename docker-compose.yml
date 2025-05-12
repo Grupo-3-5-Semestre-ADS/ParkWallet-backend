@@ -57,8 +57,11 @@ services:
     depends_on:
       catalog-db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started
     networks:
       - catalog
+      - shared
 
   chat-api:
     build:
@@ -73,6 +76,8 @@ services:
       MYSQL_HOST: chat-db
       JWT_SECRET: secret
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       chat-db:
         condition: service_healthy
     networks:
@@ -91,6 +96,8 @@ services:
       MYSQL_HOST: notification-db
       JWT_SECRET: secret
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       notification-db:
         condition: service_healthy
     networks:
@@ -108,11 +115,15 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_HOST: transaction-db
       JWT_SECRET: secret
+      API_GATEWAY_URL: http://api-gateway:8080
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       transaction-db:
         condition: service_healthy
     networks:
       - transaction
+      - shared
 
   wallet-api:
     build:
@@ -126,11 +137,20 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_HOST: wallet-db
       JWT_SECRET: secret
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+      MAX_RETRIES: 5
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       wallet-db:
         condition: service_healthy
     networks:
       - wallet
+      - rabbit
+      - shared
 
   user-api:
     build:
@@ -145,11 +165,18 @@ services:
       MYSQL_HOST: user-db
       JWT_SECRET: secret
       JWT_EXPIRATION_TIME: 10h
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       user-db:
         condition: service_healthy
     networks:
       - user
+      - rabbit
 
   # Databases
   catalog-db:
@@ -161,8 +188,8 @@ services:
       MYSQL_DATABASE: catalog
     networks:
       - catalog
-    volumes:
-      - catalog:/var/lib/mysql
+    # volumes:
+    #   - catalog:/var/lib/mysql
     <<: *healthcheck
 
   chat-db:
@@ -174,8 +201,8 @@ services:
       MYSQL_DATABASE: chat
     networks:
       - chat
-    volumes:
-      - chat:/var/lib/mysql
+    # volumes:
+    #   - chat:/var/lib/mysql
     <<: *healthcheck
 
   notification-db:
@@ -187,8 +214,8 @@ services:
       MYSQL_DATABASE: notification
     networks:
       - notification
-    volumes:
-      - notification:/var/lib/mysql
+    # volumes:
+    #   - notification:/var/lib/mysql
     <<: *healthcheck
 
   transaction-db:
@@ -200,8 +227,8 @@ services:
       MYSQL_DATABASE: transaction
     networks:
       - transaction
-    volumes:
-      - transaction:/var/lib/mysql
+    # volumes:
+    #   - transaction:/var/lib/mysql
     <<: *healthcheck
 
   wallet-db:
@@ -213,8 +240,8 @@ services:
       MYSQL_DATABASE: wallet
     networks:
       - wallet
-    volumes:
-      - wallet:/var/lib/mysql
+    # volumes:
+    #   - wallet:/var/lib/mysql
     <<: *healthcheck
 
   user-db:
@@ -226,9 +253,27 @@ services:
       MYSQL_DATABASE: user
     networks:
       - user
-    volumes:
-      - user:/var/lib/mysql
+    # volumes:
+    #   - user:/var/lib/mysql
     <<: *healthcheck
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - rabbit
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
 
 networks:
   catalog:
@@ -237,6 +282,8 @@ networks:
   transaction:
   wallet:
   user:
+  rabbit: 
+  shared:
 
 volumes:
   catalog:

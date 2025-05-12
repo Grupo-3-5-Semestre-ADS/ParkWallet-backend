@@ -9,6 +9,7 @@ import { createRequire } from 'module';
 
 import database from "./config/database.js";
 import routes from "./routes.js";
+import "./services/consumer.js";
 
 dotenv.config();
 database.connect();

@@ -14,6 +14,11 @@ const Transaction = database.sequelize.define('Transaction', {
     type: DataTypes.ENUM('purchase', 'credit'),
     allowNull: false
   },
+  status: {
+    type: DataTypes.ENUM('pending', 'completed', 'failed'),
+    allowNull: false,
+    defaultValue: 'pending'
+  },
   inactive: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,

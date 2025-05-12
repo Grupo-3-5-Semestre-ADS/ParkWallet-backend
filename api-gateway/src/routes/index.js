@@ -20,6 +20,7 @@ const serviceRegistry = {
     notifications: notificationUrl,
     transactions: transactionUrl,
     itemsTransaction: transactionUrl,
+    payment: transactionUrl, 
     wallets: walletUrl,
     users: userUrl,
     roles: userUrl,
