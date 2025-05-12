@@ -4,7 +4,8 @@ import database from '../config/database.js';
 const Wallet = database.sequelize.define('Wallet', {
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   balance: {
     type: DataTypes.DECIMAL(10, 2),

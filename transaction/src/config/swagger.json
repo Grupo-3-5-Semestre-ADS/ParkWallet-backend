@@ -821,6 +821,88 @@
           }
         }
       }
+    },
+    
+    "/api/payment/{userId}":{
+      "post": {
+        "tags": [
+          "Payment"
+        ],
+        "parameters": [ 
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID do usuário para o qual o pagamento está sendo feito.",
+          "schema": {
+            "type": "integer", 
+            "format": "int32"
+          }
+        }
+      ],
+        "description": "Realizar pagamento interno",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentRequired"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentRequired"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+        "description": "Detalhes dos produtos para o pagamento.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PaymentRequestBody"
+            }
+          }
+        }
+      }
+      }
     }
   },
   "components": {
@@ -1052,7 +1134,46 @@
         "xml": {
           "name": "CreateOrUpdateTransaction"
         }
+      },
+      "PaymentItem": {
+        "type": "object",
+        "required": [
+          "productId",
+          "quantity"
+        ],
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID do produto a ser comprado.",
+            "example": 1
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantidade do produto a ser comprado.",
+            "minimum": 1,
+            "example": 2
+          }
+        }
+      },
+      "PaymentRequestBody": {
+        "type": "object",
+        "required": [
+          "products"
+        ],
+        "properties": {
+          "products": {
+            "type": "array",
+            "description": "Lista de produtos para o pagamento.",
+            "items": {
+              "$ref": "#/components/schemas/PaymentItem"
+            },
+            "minItems": 1
+          }
+        }
       }
+
     }
   }
 }

@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import db from '../config/database.js';
 import bcrypt from 'bcryptjs';
+import { publishUserCreated } from '../services/publish.js';
 
 const User = db.sequelize.define('User', {
   name: {
@@ -73,6 +74,13 @@ const User = db.sequelize.define('User', {
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
       }
+    },
+    afterCreate: async (user) => {
+      await publishUserCreated({
+        id: user.id,
+        email: user.email,
+        name: user.name
+      });
     }
   }
 });

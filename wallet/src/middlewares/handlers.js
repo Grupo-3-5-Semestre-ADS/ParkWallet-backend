@@ -45,5 +45,16 @@ export default (req, res, next) => {
       .send();
   }
 
+
+  res.badRequest = (err) => {
+    /*
+    #swagger.responses[400] = {
+      schema: { $ref: "#/definitions/BadRequest" }
+    }
+    */
+    res
+      .status(httpStatus.BAD_REQUEST)
+      .json(err);
+  }
   next();
 }
