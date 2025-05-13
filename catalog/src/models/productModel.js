@@ -1,6 +1,5 @@
 import {DataTypes} from 'sequelize';
 import database from '../config/database.js';
-import Facility from "./facilityModel.js";
 
 const Product = database.sequelize.define('Product', {
   name: {
