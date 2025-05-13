@@ -31,7 +31,7 @@ export const listFacilities = async (req, res, next) => {
   try {
     const {_page = "1", _size = "10", _order = 'id', activesOnly = "false"} = req.query;
     const offset = (parseInt(_page) - 1) * _size;
-    const where = activesOnly === "true" ? {inactive: false} : {};
+    const where = activesOnly === "true" ? {active: true} : {};
 
     const {rows: Facilities, count: totalItems} = await Facility.findAndCountAll({
       where,
@@ -90,7 +90,7 @@ export const createFacility = async (req, res, next) => {
       type,
       latitude,
       longitude,
-      inactive: false
+      active: true
     });
 
     res.createdResponse(createdFacility);
@@ -153,7 +153,7 @@ export const toggleFacilityStatus = async (req, res, next) => {
     }
 
     await facility.update({
-      inactive: !facility.inactive,
+      active: !facility.active,
     });
 
     res.okResponse();

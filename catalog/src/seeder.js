@@ -32,7 +32,7 @@ const seedDatabase = async () => {
           min: MAP_BOUNDS.west,
           max: MAP_BOUNDS.east,
         }),
-        inactive: faker.datatype.boolean(0.1),
+        active: faker.datatype.boolean(0.90),
       };
       try {
         const newFacility = await Facility.create(facilityData);
@@ -56,7 +56,7 @@ const seedDatabase = async () => {
                 name: faker.commerce.productName(),
                 description: faker.commerce.productDescription(),
                 price: parseFloat(faker.commerce.price({ min: 5, max: 500, dec: 2 })),
-                inactive: faker.datatype.boolean(0.05),
+                active: faker.datatype.boolean(0.90),
                 facilityId: facility.id,
             };
             try {

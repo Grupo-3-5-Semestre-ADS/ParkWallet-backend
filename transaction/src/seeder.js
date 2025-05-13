@@ -72,7 +72,7 @@ const seedDatabase = async () => {
           userId: userId,
           totalValue: transactionTotalValue,
           operation: operation,
-          inactive: faker.datatype.boolean(0.02),
+          active: faker.datatype.boolean(0.95),
         };
 
         const newTransaction = await Transaction.create(transactionData);

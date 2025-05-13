@@ -23,9 +23,9 @@ const Facility = database.sequelize.define('Facility', {
     type: DataTypes.DECIMAL(9, 6),
     allowNull: false
   },
-  inactive: {
+  active: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
     allowNull: false
   }
 }, {

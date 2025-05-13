@@ -18,7 +18,7 @@ export default yup
       .oneOf(["purchase", "credit"],
         "Invalid operation (must be 'purchase' or 'credit')")
       .required("Required (operation)"),
-    inactive: yup
+    active: yup
       .boolean()
       .optional()
   })

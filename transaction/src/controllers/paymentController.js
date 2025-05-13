@@ -35,7 +35,7 @@ async function fetchProductDetailsAndCalculateValue(productInput) {
 
     const productData = await response.json();
 
-    if (!productData || productData.inactive) {
+    if (!productData || !productData.active) {
         throw new Error(`Produto com ID ${productId} está inativo ou não retornou dados válidos via API Gateway (catalog-api).`);
     }
 

@@ -56,7 +56,7 @@ const doc = {
         email: "john@example.com",
         cpf: "12345678900",
         birthdate: "1990-01-01",
-        inactive: false,
+        active: true,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
         roles: [{ name: "admin" }],
@@ -68,7 +68,7 @@ const doc = {
         cpf: "12345678900",
         password: "StrongPass123",
         birthdate: "1990-01-01",
-        inactive: false
+        active: true
       },
       Role: {
         id: "uuid",

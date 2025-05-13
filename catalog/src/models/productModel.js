@@ -17,9 +17,9 @@ const Product = database.sequelize.define('Product', {
       min: 0
     }
   },
-  inactive: {
+  active: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
     allowNull: false
   },
 }, {

@@ -1,4 +1,4 @@
-import { User, Role } from '../models/index.js';
+import {User, Role} from '../models/index.js';
 
 export const login = async (req, res, next) => {
   /*
@@ -6,10 +6,10 @@ export const login = async (req, res, next) => {
   #swagger.responses[200]
   #swagger.responses[401]
   */
-  const { email, password } = req.body;
+  const {email, password} = req.body;
 
   const user = await User.scope('withPassword').findOne({
-    where: { email }
+    where: {email}
   });
 
   if (!user) {
@@ -21,7 +21,7 @@ export const login = async (req, res, next) => {
     return res.unauthorized();
   }
 
-  const roles = await user.getRoles({ attributes: ['name'] });
+  const roles = await user.getRoles({attributes: ['name']});
 
   req.user = {
     id: user.id,
@@ -39,10 +39,10 @@ export const showUser = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     const user = await User.findByPk(id, {
-      include: [{ association: 'roles' }],
+      include: [{association: 'roles'}],
     });
 
     if (!user) return res.notFoundResponse();
@@ -59,7 +59,7 @@ export const listUsers = async (req, res, next) => {
     #swagger.responses[200]
   */
   try {
-    const { _page = 1, _size = 10, _order = 'id', ...filter } = req.query;
+    const {_page = 1, _size = 10, _order = 'id', ...filter} = req.query;
 
     const page = parseInt(_page) || 1;
     const size = parseInt(_size) || 10;
@@ -71,12 +71,12 @@ export const listUsers = async (req, res, next) => {
       if (filter[key]) where[key] = filter[key];
     }
 
-    const { rows: users, count: totalItems } = await User.findAndCountAll({
+    const {rows: users, count: totalItems} = await User.findAndCountAll({
       where,
       offset,
       limit: size,
       order: [[_order, 'ASC']],
-      include: [{ association: 'roles' }]
+      include: [{association: 'roles'}]
     });
 
     const totalPages = Math.ceil(totalItems / size);
@@ -85,7 +85,6 @@ export const listUsers = async (req, res, next) => {
     next(err);
   }
 };
-
 
 
 export const editUser = async (req, res, next) => {
@@ -98,15 +97,15 @@ export const editUser = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const user = await User.findByPk(id);
 
     if (!user) return res.notFoundResponse();
 
-    const { name, email, cpf, password, birthdate, inactive } = req.body;
+    const {name, email, cpf, password, birthdate, active} = req.body;
 
-    const updates = { name, email, cpf, birthdate, inactive };
-    if (inactive !== undefined) updates.inactive = inactive;
+    const updates = {name, email, cpf, birthdate, active};
+    if (active !== undefined) updates.active = active;
     if (password) updates.password = password;
 
     await user.update(updates);
@@ -117,7 +116,7 @@ export const editUser = async (req, res, next) => {
   }
 };
 
-export const deleteUser = async (req, res, next) => {
+export const toggleUserStatus = async (req, res, next) => {
   /*
     #swagger.tags = ["Users"]
     #swagger.responses[204]
@@ -127,19 +126,19 @@ export const deleteUser = async (req, res, next) => {
     }
   */
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     const user = await User.findByPk(id);
 
-    if (!user) return res.notFoundResponse();
+    if (!user) {
+      return res.notFoundResponse();
+    }
 
-    // Atualiza o status para inativo
-    await user.update({ active: false });
+    await user.update({
+      active: !user.active,
+    });
 
-    // Soft delete (paranoid)
-    await user.destroy();
-
-    res.noContentResponse();
+    res.okResponse();
   } catch (err) {
     next(err);
   }

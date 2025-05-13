@@ -52,7 +52,7 @@ const doc = {
         name: "product name",
         description: "product description",
         price: 100.00,
-        inactive: false,
+        active: true,
         facilityId: 1,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
@@ -64,7 +64,7 @@ const doc = {
         name: "product name",
         description: "product description",
         price: 100.00,
-        inactive: false,
+        active: true,
         facilityId: 1
       },
       Facility: {
@@ -74,7 +74,7 @@ const doc = {
         type: "store, attraction or other",
         latitude: -10.000000,
         longitude: 10.000000,
-        inactive: false,
+        active: true,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
         _links: [
@@ -87,7 +87,7 @@ const doc = {
         type: "store, attraction or other",
         latitude: -10.000000,
         longitude: 10.000000,
-        inactive: false
+        active: true
       },
     }
   }

@@ -66,7 +66,7 @@ const doc = {
         userId: "userId",
         totalValue: 10.00,
         operation: "purchase or credit",
-        inactive: false,
+        active: true,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
         _links: [
@@ -77,7 +77,7 @@ const doc = {
         userId: "userId",
         totalValue: 10.00,
         operation: "purchase or credit",
-        inactive: false
+        active: true
       },
     }
   }

@@ -1059,9 +1059,9 @@
             "type": "string",
             "example": "1990-01-01"
           },
-          "inactive": {
+          "active": {
             "type": "boolean",
-            "example": false
+            "example": true
           },
           "createdAt": {
             "type": "string",
@@ -1120,9 +1120,9 @@
             "type": "string",
             "example": "1990-01-01"
           },
-          "inactive": {
+          "active": {
             "type": "boolean",
-            "example": false
+            "example": true
           }
         },
         "xml": {

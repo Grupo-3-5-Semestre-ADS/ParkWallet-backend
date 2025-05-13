@@ -188,8 +188,8 @@ services:
       MYSQL_DATABASE: catalog
     networks:
       - catalog
-    # volumes:
-    #   - catalog:/var/lib/mysql
+    volumes:
+      - catalog:/var/lib/mysql
     <<: *healthcheck
 
   chat-db:
@@ -201,8 +201,8 @@ services:
       MYSQL_DATABASE: chat
     networks:
       - chat
-    # volumes:
-    #   - chat:/var/lib/mysql
+    volumes:
+      - chat:/var/lib/mysql
     <<: *healthcheck
 
   notification-db:
@@ -214,8 +214,8 @@ services:
       MYSQL_DATABASE: notification
     networks:
       - notification
-    # volumes:
-    #   - notification:/var/lib/mysql
+    volumes:
+      - notification:/var/lib/mysql
     <<: *healthcheck
 
   transaction-db:
@@ -227,8 +227,8 @@ services:
       MYSQL_DATABASE: transaction
     networks:
       - transaction
-    # volumes:
-    #   - transaction:/var/lib/mysql
+    volumes:
+      - transaction:/var/lib/mysql
     <<: *healthcheck
 
   wallet-db:
@@ -240,8 +240,8 @@ services:
       MYSQL_DATABASE: wallet
     networks:
       - wallet
-    # volumes:
-    #   - wallet:/var/lib/mysql
+    volumes:
+      - wallet:/var/lib/mysql
     <<: *healthcheck
 
   user-db:
@@ -253,8 +253,8 @@ services:
       MYSQL_DATABASE: user
     networks:
       - user
-    # volumes:
-    #   - user:/var/lib/mysql
+    volumes:
+      - user:/var/lib/mysql
     <<: *healthcheck
 
   rabbitmq:
@@ -282,7 +282,7 @@ networks:
   transaction:
   wallet:
   user:
-  rabbit: 
+  rabbit:
   shared:
 
 volumes:

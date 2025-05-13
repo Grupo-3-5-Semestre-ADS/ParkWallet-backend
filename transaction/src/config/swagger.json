@@ -822,20 +822,20 @@
         }
       }
     },
-    
+
     "/api/payment/{userId}":{
       "post": {
         "tags": [
           "Payment"
         ],
-        "parameters": [ 
+        "parameters": [
         {
           "name": "userId",
           "in": "path",
           "required": true,
           "description": "ID do usuário para o qual o pagamento está sendo feito.",
           "schema": {
-            "type": "integer", 
+            "type": "integer",
             "format": "int32"
           }
         }
@@ -1085,9 +1085,9 @@
             "type": "string",
             "example": "purchase or credit"
           },
-          "inactive": {
+          "active": {
             "type": "boolean",
-            "example": false
+            "example": true
           },
           "createdAt": {
             "type": "string",
@@ -1126,9 +1126,9 @@
             "type": "string",
             "example": "purchase or credit"
           },
-          "inactive": {
+          "active": {
             "type": "boolean",
-            "example": false
+            "example": true
           }
         },
         "xml": {

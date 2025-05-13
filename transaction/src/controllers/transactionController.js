@@ -31,7 +31,7 @@ export const listTransactions = async (req, res, next) => {
   try {
     const {_page = "1", _size = "10", _order = 'id', activesOnly = "false"} = req.query;
     const offset = (parseInt(_page) - 1) * _size;
-    const where = activesOnly === "true" ? {inactive: false} : {};
+    const where = activesOnly === "true" ? {active: true} : {};
 
     const {rows: transactions, count: totalItems} = await Transaction.findAndCountAll({
       where,
@@ -148,7 +148,7 @@ export const toggleTransactionStatus = async (req, res, next) => {
     }
 
     await transaction.update({
-      inactive: !transaction.inactive,
+      active: !transaction.active,
     });
 
     res.okResponse();
@@ -230,17 +230,15 @@ export const listUserTransactionsWithItems = async (req, res, next) => {
     };
 
     if (activesOnly === "true") {
-      whereClause.inactive = false;
+      whereClause.active = true;
     }
-
-  
 
     const { rows: transactions, count: totalItems } = await Transaction.findAndCountAll({
       where: whereClause,
       include: [
         {
           model: ItemTransaction,
-          as: 'itemsTransaction', 
+          as: 'itemsTransaction',
         }
       ],
       offset,

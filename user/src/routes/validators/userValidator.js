@@ -25,7 +25,9 @@ export const createUserSchema = yup.object().shape({
     .string()
     .matches(/^\d{4}-\d{2}-\d{2}$/, "Birthdate must be in YYYY-MM-DD format")
     .required("Required (birthdate)"),
-  inactive: yup.boolean().optional()
+  active: yup
+    .boolean()
+    .optional()
 });
 
 export const updateUserSchema = createUserSchema.shape({

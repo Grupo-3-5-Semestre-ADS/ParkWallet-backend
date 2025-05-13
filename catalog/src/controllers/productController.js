@@ -36,7 +36,7 @@ export const listProducts = async (req, res, next) => {
   try {
     const {_page = "1", _size = "10", _order = 'id', activesOnly = "false"} = req.query;
     const offset = (parseInt(_page) - 1) * _size;
-    const where = activesOnly === "true" ? {inactive: false} : {};
+    const where = activesOnly === "true" ? {active: true} : {};
 
     const {rows: products, count: totalItems} = await Product.findAndCountAll({
       where,
@@ -129,7 +129,7 @@ export const toggleProductStatus = async (req, res, next) => {
     }
 
     await product.update({
-      inactive: !product.inactive,
+      active: !product.active,
     });
 
     res.okResponse();

@@ -959,9 +959,9 @@
             "type": "number",
             "example": 100
           },
-          "inactive": {
+          "active": {
             "type": "boolean",
-            "example": false
+            "example": true
           },
           "facilityId": {
             "type": "number",
@@ -1004,9 +1004,9 @@
             "type": "number",
             "example": 100
           },
-          "inactive": {
+          "active": {
             "type": "boolean",
-            "example": false
+            "example": true
           },
           "facilityId": {
             "type": "number",
@@ -1044,9 +1044,9 @@
             "type": "number",
             "example": 10
           },
-          "inactive": {
+          "active": {
             "type": "boolean",
-            "example": false
+            "example": true
           },
           "createdAt": {
             "type": "string",
@@ -1093,9 +1093,9 @@
             "type": "number",
             "example": 10
           },
-          "inactive": {
+          "active": {
             "type": "boolean",
-            "example": false
+            "example": true
           }
         },
         "xml": {

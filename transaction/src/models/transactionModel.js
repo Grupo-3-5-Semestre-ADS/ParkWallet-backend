@@ -19,9 +19,9 @@ const Transaction = database.sequelize.define('Transaction', {
     allowNull: false,
     defaultValue: 'pending'
   },
-  inactive: {
+  active: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
     allowNull: false
   },
 }, {
