@@ -9,6 +9,7 @@
     "swagger:watch": "node --watch src/swagger"
   },
   "dependencies": {
+    "amqplib": "^0.10.8",
     "bcryptjs": "^3.0.2",
     "compression": "~1.8.0",
     "cors": "2.8.5",
@@ -20,6 +21,7 @@
     "morgan": "1.10.0",
     "mysql2": "^3.14.0",
     "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7",
     "swagger-ui-express": "^5.0.1",
     "yup": "^1.6.1"
   },

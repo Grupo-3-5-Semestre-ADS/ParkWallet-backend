@@ -12,30 +12,33 @@ const doc = {
   servers: [
     {
       url: `http://localhost:${process.env.SERVER_PORT}`,
+      description: "Local server"
     }
   ],
   components: {
     securitySchemes: {
       bearerAuth: {
         type: "http",
-        scheme: "bearer"
+        scheme: "bearer",
+        bearerFormat: "JWT"
       }
     },
     schemas: {
       Unauthorized: {
-        code: "401",
+        code: 401,
+        message: "Unauthorized"
       },
       NotFound: {
-        code: "404",
-        message: "",
+        code: 404,
+        message: "Resource not found"
       },
       InternalServerError: {
-        code: "500",
-        message: "",
+        code: 500,
+        message: "Internal server error"
       },
       PaymentRequired: {
-        code: "402",
-        message: "",
+        code: 402,
+        message: "Payment required"
       },
       Page: {
         current: 1,
@@ -43,52 +46,69 @@ const doc = {
         size: 10
       },
       HateoasLink: {
-        rel: "rel",
-        href: "/api/endpoint",
-        method: "METHOD"
+        rel: "self",
+        href: "/api/example",
+        method: "GET"
       },
       User: {
-        id: "id",
-        name: "user name",
-        email: "user@example.com",
-        password: "hashed_password",
-        roleId: 1,
+        id: "uuid",
+        name: "John Doe",
+        email: "john@example.com",
+        cpf: "12345678900",
+        birthdate: "1990-01-01",
         inactive: false,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
-        _links: [
-          { $ref: "#/components/schemas/HateoasLink" }
-        ]
+        roles: [{ name: "admin" }],
+        _links: [{ $ref: "#/components/schemas/HateoasLink" }]
       },
       CreateOrUpdateUser: {
-        name: "user name",
-        email: "user@example.com",
-        password: "plain_password",
-        roleId: 1,
+        name: "John Doe",
+        email: "john@example.com",
+        cpf: "12345678900",
+        password: "StrongPass123",
+        birthdate: "1990-01-01",
         inactive: false
       },
       Role: {
-        id: "id",
-        name: "role name",
-        description: "role description",
+        id: "uuid",
+        name: "admin",
+        description: "Administrator role",
+        active: true,
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
-        _links: [
-          { $ref: "#/components/schemas/HateoasLink" }
-        ]
+        users: [
+          {
+            id: "uuid",
+            name: "John Doe",
+            email: "john@example.com"
+          }
+        ],
+        _links: [{ $ref: "#/components/schemas/HateoasLink" }]
       },
       CreateOrUpdateRole: {
-        name: "role name",
-        description: "role description"
+        name: "admin",
+        description: "Administrator role",
+        active: true
+      },
+      AssignRoles: {
+        roles: ["admin", "editor"]
       }
     }
-  }
+  },
+  tags: [
+    { name: "Login", description: "Autenticação de usuários" },
+    { name: "Register", description: "Registro de usuários" },
+    { name: "Users", description: "Operações com usuários" },
+    { name: "Roles", description: "Gerenciamento de papéis (roles)" },
+    { name: "User Roles", description: "Atribuição e remoção de papéis de usuários" }
+  ]
 };
 
 const outputFile = "./config/swagger.json";
 const endpointFiles = ["./routes.js"];
 
-swaggerAutogen({openapi: "3.0.0"})(outputFile, endpointFiles, doc)
+swaggerAutogen({ openapi: "3.0.0" })(outputFile, endpointFiles, doc)
   .then(async () => {
     await import("./server.js");
   });

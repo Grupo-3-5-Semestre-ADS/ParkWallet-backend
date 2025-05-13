@@ -9,10 +9,18 @@ import {createRequire} from "module";
 
 import database from "./config/database.js";
 import routes from "./routes.js";
+import { createDefaultAdmin } from './config/createDefaultAdmin.js';
+import { createMainRoles } from './config/createMainRoles.js';
 
 dotenv.config();
-database.connect();
 
+const initializeDatabase = async () => {
+  await database.connect();
+  await createMainRoles(); 
+  await createDefaultAdmin();
+}
+
+initializeDatabase();
 const app = express();
 const require = createRequire(import.meta.url);
 const swaggerFile = require('./config/swagger.json');

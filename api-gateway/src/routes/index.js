@@ -20,11 +20,20 @@ const serviceRegistry = {
     notifications: notificationUrl,
     transactions: transactionUrl,
     itemsTransaction: transactionUrl,
+    payment: transactionUrl, 
     wallets: walletUrl,
     users: userUrl,
     roles: userUrl,
     auth: userUrl,
 };
+
+router.post('/login', proxy(userUrl, {
+    proxyReqPathResolver: (req) => '/login'
+  }));
+  
+  router.post('/register', proxy(userUrl, {
+    proxyReqPathResolver: (req) => '/register'
+  }));
 
 router.use('/api', (req, res, next) => {
     const pathSegments = req.path.split('/').filter(Boolean);
