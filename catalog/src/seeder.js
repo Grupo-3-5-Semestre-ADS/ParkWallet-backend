@@ -9,6 +9,13 @@ const NUM_FACILITIES = 50;
 const PRODUCTS_PER_FACILITY_MIN = 20;
 const PRODUCTS_PER_FACILITY_MAX = 20;
 
+const MAP_BOUNDS = {
+  north: -25.1480,
+  south: -25.1680,
+  east: -54.2900,
+  west: -54.3100,
+};
+
 const seedDatabase = async () => {
     const createdFacilities = [];
 
@@ -17,8 +24,14 @@ const seedDatabase = async () => {
         name: faker.company.name(),
         description: faker.lorem.paragraph(),
         type: faker.helpers.arrayElement(['store', 'attraction', 'other']),
-        latitude: faker.location.latitude({ min: -24, max: -22 }),
-        longitude: faker.location.longitude({ min: -47, max: -43 }),
+        latitude: faker.location.latitude({
+          min: MAP_BOUNDS.south,
+          max: MAP_BOUNDS.north,
+        }),
+        longitude: faker.location.longitude({
+          min: MAP_BOUNDS.west,
+          max: MAP_BOUNDS.east,
+        }),
         inactive: faker.datatype.boolean(0.1),
       };
       try {
