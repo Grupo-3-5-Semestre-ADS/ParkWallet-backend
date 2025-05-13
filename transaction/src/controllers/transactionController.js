@@ -225,12 +225,15 @@ export const listUserTransactionsWithItems = async (req, res, next) => {
     const offset = (parseInt(_page) - 1) * parseInt(_size); // Ensure _size is parsed too
 
     const whereClause = {
-      userId: parseInt(userId), // Filter by userId
+      userId: parseInt(userId),
+      status: "completed" // Filter by userId
     };
 
     if (activesOnly === "true") {
       whereClause.inactive = false;
     }
+
+  
 
     const { rows: transactions, count: totalItems } = await Transaction.findAndCountAll({
       where: whereClause,
