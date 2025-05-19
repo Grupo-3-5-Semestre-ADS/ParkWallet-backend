@@ -79,9 +79,12 @@ const generateHateoasCollection = (req, items, totalPages) => {
         method: 'GET',
       },
     ],
-    data: items.map(item => ({
-      ...item.toJSON(),
-      _links: generateHateoasLinks(req, item.id),
-    })),
+    data: items.map(item => {
+      const dataItem = typeof item.toJSON === 'function' ? item.toJSON() : item;
+      return {
+        ...dataItem,
+        _links: generateHateoasLinks(req, item.id),
+      };
+    }),
   };
 };

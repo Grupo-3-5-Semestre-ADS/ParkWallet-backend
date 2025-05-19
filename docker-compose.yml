@@ -54,6 +54,8 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_HOST: catalog-db
       JWT_SECRET: secret
+      GATEWAY_HOST: api-gateway
+      GATEWAY_PORT: 8080
     depends_on:
       catalog-db:
         condition: service_healthy

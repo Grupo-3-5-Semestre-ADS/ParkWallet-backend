@@ -1,4 +1,5 @@
 import {Transaction, ItemTransaction} from "../models/index.js";
+import {Op} from "sequelize";
 
 export const showTransaction = async (req, res, next) => {
   /*
@@ -159,81 +160,26 @@ export const toggleTransactionStatus = async (req, res, next) => {
 
 export const listUserTransactionsWithItems = async (req, res, next) => {
   /*
-  #swagger.tags = ["Transactions", "Users"]
-  #swagger.summary = "Lists all transactions and their items for a specific user"
-  #swagger.parameters['userId'] = {
-    in: 'path',
-    required: true,
-    type: 'integer',
-    description: 'ID of the user'
-  }
-  #swagger.parameters['_page'] = {
-    in: 'query',
-    type: 'integer',
-    description: 'Page number (default: 1)'
-  }
-  #swagger.parameters['_size'] = {
-    in: 'query',
-    type: 'integer',
-    description: 'Number of items per page (default: 10)'
-  }
-  #swagger.parameters['_order'] = {
-    in: 'query',
-    type: 'string',
-    description: 'Order field (default: id)'
-  }
-  #swagger.parameters['activesOnly'] = {
-    in: 'query',
-    type: 'boolean',
-    description: 'Filter for active transactions only (default: false)'
-  }
-  #swagger.responses[200] = {
-    description: "A list of user's transactions with their items.",
-    schema: {
-      type: "object",
-      properties: {
-        items: {
-          type: "array",
-          items: {
-            allOf: [
-              { $ref: "#/definitions/Transaction" },
-              {
-                type: "object",
-                properties: {
-                  itemsTransaction: {
-                    type: "array",
-                    items: { $ref: "#/definitions/ItemTransaction" } // Assuming you have an ItemTransaction definition
-                  }
-                }
-              }
-            ]
-          }
-        },
-        totalPages: { type: "integer" },
-        // ... other HATEOAS properties
-      }
-    }
-  }
+  #swagger.tags = ["Transactions"]
+  #swagger.responses[200]
   #swagger.responses[404] = {
-    schema: { $ref: "#/definitions/NotFound" },
-    description: "User not found (or user has no transactions, depending on desired behavior)"
+    schema: { $ref: "#/definitions/NotFound" }
   }
   */
   try {
-    const { userId } = req.params;
-    const { _page = "1", _size = "10", _order = 'id', activesOnly = "false" } = req.query;
-    const offset = (parseInt(_page) - 1) * parseInt(_size); // Ensure _size is parsed too
+    const {_page = "1", _size = "10", _order = 'id', activesOnly = "false", userId} = req.query;
+    const offset = (parseInt(_page) - 1) * parseInt(_size);
 
     const whereClause = {
       userId: parseInt(userId),
-      status: "completed" // Filter by userId
+      status: "completed"
     };
 
     if (activesOnly === "true") {
       whereClause.active = true;
     }
 
-    const { rows: transactions, count: totalItems } = await Transaction.findAndCountAll({
+    const {rows: transactions, count: totalItems} = await Transaction.findAndCountAll({
       where: whereClause,
       include: [
         {
@@ -244,11 +190,57 @@ export const listUserTransactionsWithItems = async (req, res, next) => {
       offset,
       limit: parseInt(_size),
       order: [[_order, 'ASC']],
-      distinct: true, // Important for correct count when using include with hasMany
+      distinct: true,
     });
 
     const totalPages = Math.ceil(totalItems / parseInt(_size));
-    res.hateoas_list(transactions, totalPages); // Your hateoas_list should handle the nested itemsTransaction
+    res.hateoas_list(transactions, totalPages);
+
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const listTransactionsByProductIds = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Transactions"]
+  #swagger.responses[200]
+  #swagger.responses[404] = {
+    schema: { $ref: "#/definitions/NotFound" }
+  }
+  */
+  try {
+    const {productIds} = req.query;
+
+    if (!productIds) {
+      return res.status(400).json({message: "ProductIds is required."});
+    }
+
+    const productIdsArray = productIds.split(',')
+      .map(id => parseInt(id.trim()))
+      .filter(id => !isNaN(id) && id > 0);
+
+    if (productIdsArray.length === 0) {
+      return res.status(400).json({message: "Missing productIds."});
+    }
+
+    const {rows: transactions} = await Transaction.findAndCountAll({
+      include: [
+        {
+          model: ItemTransaction,
+          as: 'itemsTransaction',
+          where: {
+            productId: {
+              [Op.in]: productIdsArray
+            }
+          },
+          required: true
+        }
+      ],
+      distinct: true,
+    });
+
+    res.hateoas_list(transactions);
 
   } catch (err) {
     next(err);

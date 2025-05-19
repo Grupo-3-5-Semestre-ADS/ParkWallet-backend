@@ -1,4 +1,5 @@
-import {Facility} from "../models/index.js";
+import {Facility, Product} from "../models/index.js";
+import axios from "axios";
 
 export const showFacility = async (req, res, next) => {
   /*
@@ -67,6 +68,74 @@ export const listProductsByFacility = async (req, res, next) => {
     const products = await facility.getProducts();
 
     res.hateoas_list(products);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const listTransactionsByFacility = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Facilities"]
+  #swagger.responses[200]
+  #swagger.responses[404] = {
+    schema: { $ref: "#/definitions/NotFound" }
+  }
+  */
+  try {
+    const { id } = req.params;
+
+    const facility = await Facility.findByPk(id, {
+      include: [{
+        model: Product,
+        as: 'products',
+      }]
+    });
+
+    if (!facility) {
+      return res.notFoundResponse();
+    }
+
+    if (!facility.products || facility.products.length === 0) {
+      return res.hateoas_list([], 0);
+    }
+
+    const productMap = new Map();
+    facility.products.forEach(product => {
+      productMap.set(product.id, product.toJSON());
+    });
+
+    const productIds = facility.products.map(product => product.id);
+
+    const transactionServiceBaseUrl = `http://${process.env.GATEWAY_HOST}:${process.env.GATEWAY_PORT}`;
+    const transactionsEndpoint = `${transactionServiceBaseUrl}/api/transactions/by-products`;
+
+    const params = {
+      productIds: productIds.join(','),
+    };
+
+    const transactionServiceResponse = await axios.get(transactionsEndpoint, { params });
+    const transactionsFromService = transactionServiceResponse.data.data;
+
+    if (!transactionsFromService || !Array.isArray(transactionsFromService) || transactionsFromService.length === 0) {
+        return res.hateoas_list([], 0);
+    }
+
+    const enrichedTransactions = transactionsFromService.map(transaction => {
+      const enrichedItems = transaction.itemsTransaction.map(item => {
+        const productDetails = productMap.get(item.productId);
+        return {
+          ...item,
+          product: productDetails || null
+        };
+      });
+
+      return {
+        ...transaction,
+        itemsTransaction: enrichedItems
+      };
+    });
+
+    return res.hateoas_list(enrichedTransactions);
   } catch (err) {
     next(err);
   }

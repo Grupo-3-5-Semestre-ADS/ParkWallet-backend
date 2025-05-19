@@ -155,6 +155,143 @@
         }
       }
     },
+    "/api/transactions/by-user": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "schema",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transactions/by-products": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "schema",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/transactions/{id}/items": {
       "get": {
         "tags": [
@@ -822,25 +959,19 @@
         }
       }
     },
-
-    "/api/payment/{userId}":{
+    "/api/payment/{userId}": {
       "post": {
-        "tags": [
-          "Payment"
-        ],
+        "description": "",
         "parameters": [
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "description": "ID do usuário para o qual o pagamento está sendo feito.",
-          "schema": {
-            "type": "integer",
-            "format": "int32"
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
-        }
-      ],
-        "description": "Realizar pagamento interno",
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -892,16 +1023,19 @@
           }
         },
         "requestBody": {
-        "description": "Detalhes dos produtos para o pagamento.",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PaymentRequestBody"
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "products": {
+                    "example": "any"
+                  }
+                }
+              }
             }
           }
         }
-      }
       }
     }
   },
@@ -1134,46 +1268,7 @@
         "xml": {
           "name": "CreateOrUpdateTransaction"
         }
-      },
-      "PaymentItem": {
-        "type": "object",
-        "required": [
-          "productId",
-          "quantity"
-        ],
-        "properties": {
-          "productId": {
-            "type": "integer",
-            "format": "int32",
-            "description": "ID do produto a ser comprado.",
-            "example": 1
-          },
-          "quantity": {
-            "type": "integer",
-            "format": "int32",
-            "description": "Quantidade do produto a ser comprado.",
-            "minimum": 1,
-            "example": 2
-          }
-        }
-      },
-      "PaymentRequestBody": {
-        "type": "object",
-        "required": [
-          "products"
-        ],
-        "properties": {
-          "products": {
-            "type": "array",
-            "description": "Lista de produtos para o pagamento.",
-            "items": {
-              "$ref": "#/components/schemas/PaymentItem"
-            },
-            "minItems": 1
-          }
-        }
       }
-
     }
   }
 }

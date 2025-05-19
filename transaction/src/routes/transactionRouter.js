@@ -8,14 +8,15 @@ import {
   listItemsByTransaction,
   listTransactions,
   showTransaction,
-  listUserTransactionsWithItems
+  listUserTransactionsWithItems,
+  listTransactionsByProductIds
 } from "../controllers/transactionController.js";
 
 const router = Router()
 
 router.get('/', listTransactions)
-router.get('/users/:userId/transactions-with-items', listUserTransactionsWithItems)
-
+router.get('/by-user', listUserTransactionsWithItems)
+router.get('/by-products', listTransactionsByProductIds)
 router.get('/:id/items', listItemsByTransaction)
 router.get('/:id', showTransaction)
 router.post('/', validator(schema), createTransaction)

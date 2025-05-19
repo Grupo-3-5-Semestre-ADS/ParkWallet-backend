@@ -7,13 +7,15 @@ import {
   editFacility,
   listFacilities,
   listProductsByFacility,
-  showFacility
+  showFacility,
+  listTransactionsByFacility
 } from "../controllers/facilityController.js";
 
 const router = Router()
 
 router.get('/', listFacilities)
 router.get('/:id/products', listProductsByFacility)
+router.get('/:id/transactions', listTransactionsByFacility)
 router.get('/:id', showFacility)
 router.post('/', validator(schema), createFacility)
 router.put('/:id', validator(schema), editFacility)

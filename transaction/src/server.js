@@ -15,7 +15,7 @@ const listening = async () => {
     const transactionCount = await Transaction.count();
 
     if (transactionCount === 0) {
-      //await seedDatabase();
+      await seedDatabase();
       console.log('Seed done!');
     }
   } catch (syncOrSeedError) {

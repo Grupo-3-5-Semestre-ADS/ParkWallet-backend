@@ -40,9 +40,10 @@ const seedDatabase = async () => {
           const quantity = faker.number.int({min: 1, max: 3});
           const productPrice = faker.number.float({
             min: 1,
-            max: 40
+            max: 40,
+            precision: 0.01
           });
-          const productId = faker.number.float({
+          const productId = faker.number.int({
             min: MIN_PRODUCT_ID,
             max: MAX_PRODUCT_ID
           });
