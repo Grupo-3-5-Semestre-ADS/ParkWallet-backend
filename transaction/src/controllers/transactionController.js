@@ -210,7 +210,8 @@ export const listTransactionsByProductIds = async (req, res, next) => {
   }
   */
   try {
-    const {productIds} = req.query;
+    const {_page = "1", _size = "10", productIds} = req.query;
+    const offset = (parseInt(_page) - 1) * _size;
 
     if (!productIds) {
       return res.status(400).json({message: "ProductIds is required."});
@@ -224,7 +225,7 @@ export const listTransactionsByProductIds = async (req, res, next) => {
       return res.status(400).json({message: "Missing productIds."});
     }
 
-    const {rows: transactions} = await Transaction.findAndCountAll({
+    const {rows: transactions, count: totalItems} = await Transaction.findAndCountAll({
       include: [
         {
           model: ItemTransaction,
@@ -237,11 +238,14 @@ export const listTransactionsByProductIds = async (req, res, next) => {
           required: true
         }
       ],
+      offset,
+      limit: parseInt(_size),
+      order: [["createdAt", 'DESC']],
       distinct: true,
     });
 
-    res.hateoas_list(transactions);
-
+    const totalPages = Math.ceil(totalItems / _size);
+    res.hateoas_list(transactions, totalPages);
   } catch (err) {
     next(err);
   }

@@ -82,7 +82,8 @@ export const listTransactionsByFacility = async (req, res, next) => {
   }
   */
   try {
-    const { id } = req.params;
+    const {_page = "1", _size = "10"} = req.query;
+    const {id} = req.params;
 
     const facility = await Facility.findByPk(id, {
       include: [{
@@ -111,16 +112,18 @@ export const listTransactionsByFacility = async (req, res, next) => {
 
     const params = {
       productIds: productIds.join(','),
+      _page,
+      _size,
     };
 
-    const transactionServiceResponse = await axios.get(transactionsEndpoint, { params });
-    const transactionsFromService = transactionServiceResponse.data.data;
+    const transactionServiceResponse = await axios.get(transactionsEndpoint, {params});
+    const transactionData = transactionServiceResponse.data;
 
-    if (!transactionsFromService || !Array.isArray(transactionsFromService) || transactionsFromService.length === 0) {
-        return res.hateoas_list([], 0);
+    if (!transactionData || !Array.isArray(transactionData.data) || transactionData.data.length === 0) {
+      return res.hateoas_list([], 0);
     }
 
-    const enrichedTransactions = transactionsFromService.map(transaction => {
+    transactionData.data = transactionData.data.map(transaction => {
       const enrichedItems = transaction.itemsTransaction.map(item => {
         const productDetails = productMap.get(item.productId);
         return {
@@ -135,7 +138,7 @@ export const listTransactionsByFacility = async (req, res, next) => {
       };
     });
 
-    return res.hateoas_list(enrichedTransactions);
+    return res.okResponse(transactionData);
   } catch (err) {
     next(err);
   }
