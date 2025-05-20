@@ -123,20 +123,29 @@ export const listTransactionsByFacility = async (req, res, next) => {
       return res.hateoas_list([], 0);
     }
 
-    transactionData.data = transactionData.data.map(transaction => {
-      const enrichedItems = transaction.itemsTransaction.map(item => {
-        const productDetails = productMap.get(item.productId);
+    transactionData.data = await Promise.all(transactionData.data.map(async transaction => {
+      const enrichedItems = await Promise.all(transaction.itemsTransaction.map(async item => {
+        let productDetails = productMap.get(item.productId);
+
+        if (!productDetails) {
+          const foundProduct = await Product.findByPk(item.productId);
+          productDetails = foundProduct ? foundProduct.toJSON() : null;
+          if (productDetails) {
+            productMap.set(item.productId, productDetails);
+          }
+        }
+
         return {
           ...item,
-          product: productDetails || null
+          product: productDetails
         };
-      });
+      }));
 
       return {
         ...transaction,
         itemsTransaction: enrichedItems
       };
-    });
+    }));
 
     return res.okResponse(transactionData);
   } catch (err) {

@@ -225,7 +225,7 @@ export const listTransactionsByProductIds = async (req, res, next) => {
       return res.status(400).json({message: "Missing productIds."});
     }
 
-    const {rows: transactions, count: totalItems} = await Transaction.findAndCountAll({
+    const matchingTransactions = await Transaction.findAll({
       include: [
         {
           model: ItemTransaction,
@@ -236,6 +236,29 @@ export const listTransactionsByProductIds = async (req, res, next) => {
             }
           },
           required: true
+        }
+      ],
+      attributes: ['id'],
+      raw: true
+    });
+
+    const matchingTransactionIds = [...new Set(matchingTransactions.map(t => t.id))];
+
+    if (matchingTransactionIds.length === 0) {
+      return res.hateoas_list([], 0);
+    }
+
+    const { rows: transactions, count: totalItems } = await Transaction.findAndCountAll({
+      where: {
+        id: {
+          [Op.in]: matchingTransactionIds
+        }
+      },
+      include: [
+        {
+          model: ItemTransaction,
+          as: 'itemsTransaction',
+          required: false
         }
       ],
       offset,
