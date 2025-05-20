@@ -238,33 +238,34 @@ export const listTransactionsByProductIds = async (req, res, next) => {
           required: true
         }
       ],
-      attributes: ['id'],
-      raw: true
+      order: [['id', 'DESC']],
+      attributes: ['id', 'createdAt'],
     });
 
-    const matchingTransactionIds = [...new Set(matchingTransactions.map(t => t.id))];
+    const matchingTransactionIds = [...new Map(
+      matchingTransactions.map(t => [t.id, t])
+    )].map(([id]) => id);
 
     if (matchingTransactionIds.length === 0) {
       return res.hateoas_list([], 0);
     }
 
-    const { rows: transactions, count: totalItems } = await Transaction.findAndCountAll({
+    const totalItems = matchingTransactionIds.length;
+    const pagedIds = matchingTransactionIds.slice(offset, offset + parseInt(_size));
+
+    const transactions = await Transaction.findAll({
       where: {
         id: {
-          [Op.in]: matchingTransactionIds
+          [Op.in]: pagedIds
         }
       },
       include: [
         {
           model: ItemTransaction,
-          as: 'itemsTransaction',
-          required: false
+          as: 'itemsTransaction'
         }
       ],
-      offset,
-      limit: parseInt(_size),
-      order: [["createdAt", 'DESC']],
-      distinct: true,
+      order: [['id', 'DESC']],
     });
 
     const totalPages = Math.ceil(totalItems / _size);
