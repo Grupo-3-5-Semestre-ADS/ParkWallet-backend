@@ -29,6 +29,11 @@ const User = db.sequelize.define('User', {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
+  role: {
+    type: DataTypes.ENUM('CUSTOMER', 'ADMIN', 'SELLER'),
+    allowNull: false,
+    defaultValue: 'CUSTOMER'
+  },
   active: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
@@ -87,6 +92,10 @@ const User = db.sequelize.define('User', {
 
 User.prototype.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
+};
+
+User.prototype.hasRole = function (roleName) {
+  return this.role === roleName;
 };
 
 export default User;

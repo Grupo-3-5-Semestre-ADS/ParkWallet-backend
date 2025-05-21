@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "http://localhost:undefined",
       "description": "Local server"
     }
   ],
@@ -23,14 +23,6 @@
     {
       "name": "Users",
       "description": "Operações com usuários"
-    },
-    {
-      "name": "Roles",
-      "description": "Gerenciamento de papéis (roles)"
-    },
-    {
-      "name": "User Roles",
-      "description": "Atribuição e remoção de papéis de usuários"
     }
   ],
   "paths": {
@@ -106,6 +98,9 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized",
@@ -240,12 +235,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
+        }
       }
     },
     "/api/users/{id}": {
@@ -298,12 +288,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
+        }
       },
       "put": {
         "tags": [
@@ -370,11 +355,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -390,8 +370,10 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/users/{id}/toggle-status": {
+      "patch": {
         "tags": [
           "Users"
         ],
@@ -455,18 +437,13 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
+        }
       }
     },
-    "/api/users/{id}/add-roles": {
+    "/api/users/{id}/role": {
       "patch": {
         "tags": [
-          "User Roles"
+          "Users"
         ],
         "description": "",
         "parameters": [
@@ -501,6 +478,9 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -517,409 +497,21 @@
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "roles": [
-                  "admin",
-                  "editor"
-                ]
+                "role": "CUSTOMER"
               }
             },
             "application/xml": {
               "schema": {
-                "roles": [
-                  "admin",
-                  "editor"
-                ]
+                "role": "CUSTOMER"
               }
             }
           }
         }
-      }
-    },
-    "/api/users/{id}/remove-roles": {
-      "patch": {
-        "tags": ["User Roles"],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
-      }
-    },
-    "/api/roles/": {
-      "get": {
-        "tags": [
-          "Roles"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Roles"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "402": {
-            "description": "Payment Required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Role"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Role"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/roles/{id}": {
-      "get": {
-        "tags": [
-          "Roles"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "Roles"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "402": {
-            "description": "Payment Required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaymentRequired"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Role"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Role"
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Roles"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unauthorized"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
       }
     }
   },
@@ -1063,6 +655,10 @@
             "type": "boolean",
             "example": true
           },
+          "role": {
+            "type": "string",
+            "example": "CUSTOMER"
+          },
           "createdAt": {
             "type": "string",
             "example": "2025-01-01T01:00:00.000Z"
@@ -1070,18 +666,6 @@
           "updatedAt": {
             "type": "string",
             "example": "2025-01-01T01:00:00.000Z"
-          },
-          "roles": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "admin"
-                }
-              }
-            }
           },
           "_links": {
             "type": "array",
@@ -1123,109 +707,14 @@
           "active": {
             "type": "boolean",
             "example": true
+          },
+          "role": {
+            "type": "string",
+            "example": "CUSTOMER"
           }
         },
         "xml": {
           "name": "CreateOrUpdateUser"
-        }
-      },
-      "Role": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "example": "admin"
-          },
-          "description": {
-            "type": "string",
-            "example": "Administrator role"
-          },
-          "active": {
-            "type": "boolean",
-            "example": true
-          },
-          "createdAt": {
-            "type": "string",
-            "example": "2025-01-01T01:00:00.000Z"
-          },
-          "updatedAt": {
-            "type": "string",
-            "example": "2025-01-01T01:00:00.000Z"
-          },
-          "users": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "example": "uuid"
-                },
-                "name": {
-                  "type": "string",
-                  "example": "John Doe"
-                },
-                "email": {
-                  "type": "string",
-                  "example": "john@example.com"
-                }
-              }
-            }
-          },
-          "_links": {
-            "type": "array",
-            "items": {
-              "xml": {
-                "name": "hateoaslink"
-              },
-              "$ref": "#/components/schemas/HateoasLink"
-            }
-          }
-        },
-        "xml": {
-          "name": "Role"
-        }
-      },
-      "CreateOrUpdateRole": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "admin"
-          },
-          "description": {
-            "type": "string",
-            "example": "Administrator role"
-          },
-          "active": {
-            "type": "boolean",
-            "example": true
-          }
-        },
-        "xml": {
-          "name": "CreateOrUpdateRole"
-        }
-      },
-      "AssignRoles": {
-        "type": "object",
-        "properties": {
-          "roles": {
-            "type": "array",
-            "example": [
-              "admin",
-              "editor"
-            ],
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "xml": {
-          "name": "AssignRoles"
         }
       }
     }

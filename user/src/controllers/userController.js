@@ -1,4 +1,4 @@
-import {User, Role} from '../models/index.js';
+import User from '../models/userModel.js';
 
 export const login = async (req, res, next) => {
   /*
@@ -21,12 +21,10 @@ export const login = async (req, res, next) => {
     return res.unauthorized();
   }
 
-  const roles = await user.getRoles({attributes: ['name']});
-
   req.user = {
     id: user.id,
     email: user.email,
-    roles: roles.map(role => role.name),
+    role: user.role,
   };
 
   next();
@@ -41,9 +39,7 @@ export const showUser = async (req, res, next) => {
   try {
     const {id} = req.params;
 
-    const user = await User.findByPk(id, {
-      include: [{association: 'roles'}],
-    });
+    const user = await User.findByPk(id);
 
     if (!user) return res.notFoundResponse();
 
@@ -71,12 +67,11 @@ export const listUsers = async (req, res, next) => {
       if (filter[key]) where[key] = filter[key];
     }
 
-    const {rows: users, count: totalItems} = await User.findAndCountAll({
+    const { rows: users, count: totalItems } = await User.findAndCountAll({
       where,
       offset,
       limit: size,
-      order: [[_order, 'ASC']],
-      include: [{association: 'roles'}]
+      order: [[_order, 'ASC']]
     });
 
     const totalPages = Math.ceil(totalItems / size);
@@ -139,6 +134,41 @@ export const toggleUserStatus = async (req, res, next) => {
     });
 
     res.okResponse();
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const changeUserRole = async (req, res, next) => {
+  /*
+    #swagger.tags = ["Users"]
+    #swagger.requestBody = {
+      required: true,
+      schema: {
+        role: "CUSTOMER"
+      }
+    }
+    #swagger.responses[200]
+    #swagger.responses[400]
+    #swagger.responses[404]
+  */
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    const validRoles = ['CUSTOMER', 'ADMIN', 'SELLER'];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ message: 'Role inválida. As opções são: CUSTOMER, ADMIN, SELLER.' });
+    }
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.notFoundResponse();
+    }
+
+    await user.update({ role });
+
+    return res.hateoas_item(user);
   } catch (err) {
     next(err);
   }

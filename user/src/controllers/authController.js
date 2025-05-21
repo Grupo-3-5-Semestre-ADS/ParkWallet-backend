@@ -8,7 +8,7 @@ export const generate = (req, res, next) => {
   const payload = {
     id: req.user.id,
     email: req.user.email,
-    roles: req.user.roles,
+    role: req.user.role,
   };
 
   const JWTSECRET = process.env.JWT_SECRET;
@@ -42,14 +42,10 @@ export const verify = (role) => {
         req.payload = payload;
 
         // Se o usuário for ADMIN, ignore a verificação de outras roles
-        if (payload.roles.includes('ADMIN')) {
-          return next();
-        }
+        if (payload.role === 'ADMIN') return next();
 
         // Verifica se o usuário tem a role necessária
-        if (role && !payload.roles.includes(role)) {
-          return res.unauthorized('Role não autorizada');
-        }
+        if (role && payload.role !== role) return res.unauthorized('Role não autorizada');
 
         return next();
       });
