@@ -1,4 +1,4 @@
-import { User, Role } from '../models/index.js';
+import User from '../models/userModel.js';
 
 export const createUser = async (req, res, next) => {
     /*
@@ -18,16 +18,9 @@ export const createUser = async (req, res, next) => {
         cpf,
         password,
         birthdate,
-        active: true
+        active: true,
+        role: 'CUSTOMER' // atribuição direta
       });
-
-      const role = await Role.findOne({ where: { name: 'CUSTOMER' } });
-
-      if (!role) {
-        return res.status(404).json({ message: 'Role not found' });
-      }
-
-      await user.addRole(role);
 
       res.createdResponse();
     } catch (err) {

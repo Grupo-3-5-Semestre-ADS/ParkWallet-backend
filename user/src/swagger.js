@@ -57,9 +57,9 @@ const doc = {
         cpf: "12345678900",
         birthdate: "1990-01-01",
         active: true,
+        role: "CUSTOMER", // <- campo role agora é direto
         createdAt: "2025-01-01T01:00:00.000Z",
         updatedAt: "2025-01-01T01:00:00.000Z",
-        roles: [{ name: "admin" }],
         _links: [{ $ref: "#/components/schemas/HateoasLink" }]
       },
       CreateOrUpdateUser: {
@@ -68,41 +68,18 @@ const doc = {
         cpf: "12345678900",
         password: "StrongPass123",
         birthdate: "1990-01-01",
-        active: true
-      },
-      Role: {
-        id: "uuid",
-        name: "admin",
-        description: "Administrator role",
         active: true,
-        createdAt: "2025-01-01T01:00:00.000Z",
-        updatedAt: "2025-01-01T01:00:00.000Z",
-        users: [
-          {
-            id: "uuid",
-            name: "John Doe",
-            email: "john@example.com"
-          }
-        ],
-        _links: [{ $ref: "#/components/schemas/HateoasLink" }]
-      },
-      CreateOrUpdateRole: {
-        name: "admin",
-        description: "Administrator role",
-        active: true
-      },
-      AssignRoles: {
-        roles: ["admin", "editor"]
+        role: "CUSTOMER"
       }
     }
   },
+
   tags: [
     { name: "Login", description: "Autenticação de usuários" },
     { name: "Register", description: "Registro de usuários" },
-    { name: "Users", description: "Operações com usuários" },
-    { name: "Roles", description: "Gerenciamento de papéis (roles)" },
-    { name: "User Roles", description: "Atribuição e remoção de papéis de usuários" }
+    { name: "Users", description: "Operações com usuários" }
   ]
+
 };
 
 const outputFile = "./config/swagger.json";

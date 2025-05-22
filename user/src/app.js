@@ -10,13 +10,11 @@ import {createRequire} from "module";
 import database from "./config/database.js";
 import routes from "./routes.js";
 import { createDefaultAdmin } from './config/createDefaultAdmin.js';
-import { createMainRoles } from './config/createMainRoles.js';
 
 dotenv.config();
 
 const initializeDatabase = async () => {
   await database.connect();
-  await createMainRoles(); 
   await createDefaultAdmin();
 }
 
