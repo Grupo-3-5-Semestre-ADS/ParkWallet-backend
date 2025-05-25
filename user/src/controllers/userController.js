@@ -30,7 +30,6 @@ export const login = async (req, res, next) => {
   next();
 };
 
-
 export const showUser = async (req, res, next) => {
   /*
   #swagger.tags = ["Users"]
@@ -80,7 +79,6 @@ export const listUsers = async (req, res, next) => {
     next(err);
   }
 };
-
 
 export const editUser = async (req, res, next) => {
   /*
