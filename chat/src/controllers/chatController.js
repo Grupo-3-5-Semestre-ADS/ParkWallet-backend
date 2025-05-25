@@ -85,7 +85,7 @@ export const listClientConversations = async (req, res, next) => {
     for (const userId of allUserIdsInvolved) {
       try {
         const response = await axios.get(`${gatewayServiceBaseUrl}/api/users/${userId}`);
-        const user = response.data?.data;
+        const user = response.data;
 
         if (user && user.role && user.role === 'CUSTOMER') {
           clientUsersDetails.push({

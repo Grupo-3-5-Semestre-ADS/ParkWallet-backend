@@ -8,7 +8,7 @@ import {
 const router = Router()
 
 router.post('/', validator(schema), createChat)
-router.get('/:userId', listUserChats)
 router.get('/conversations', listClientConversations)
+router.get('/:userId', listUserChats)
 
 export default router
