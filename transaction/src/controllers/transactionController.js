@@ -167,7 +167,7 @@ export const listUserTransactionsWithItems = async (req, res, next) => {
   }
   */
   try {
-    const {_page = "1", _size = "10", _order = 'id', activesOnly = "false", userId} = req.query;
+    const {_page = "1", _size = "10", _order, activesOnly = "false", userId} = req.query;
     const offset = (parseInt(_page) - 1) * parseInt(_size);
 
     const whereClause = {
@@ -189,7 +189,7 @@ export const listUserTransactionsWithItems = async (req, res, next) => {
       ],
       offset,
       limit: parseInt(_size),
-      order: [[_order, 'ASC']],
+      order: [[_order || 'createdAt', 'DESC']],
       distinct: true,
     });
 
