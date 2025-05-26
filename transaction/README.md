@@ -1,32 +1,49 @@
-# Tecnologias Emergentes - Template 01
+# Transaction API Microservice
 
-Este projeto tem como objetivo proporcionar um ambiente prático para o desenvolvimento e treinamento na criação de APIs utilizando **Node.js** e **Express**. Com a crescente demanda por aplicações baseadas em arquitetura de micro-serviços e integrações via APIs.
+Este microserviço é responsável por gerenciar todas as informações relacionadas as transações da aplicação.
 
-## Requisitos
+## Endpoints da API
 
-- [Node.js](https://nodejs.org/)
-- [Postman](https://www.postman.com/)
-- [VsCode](https://code.visualstudio.com/)
+Os principais endpoints são prefixados com `/api`:
 
-## Banco de Dados
+*   **Transações**:
+    *   `GET /api/transactions`
+    *   `GET /api/transactions/by-user`
+    *   `GET /api/transactions/by-products`
+    *   `GET /api/transactions/:id/items`
+    *   `GET /api/transactions/:id`
+    *   `POST /api/transactions`
+    *   `PUT /api/transactions/:id`
+    *   `PATCH /api/transactions/:id/toggle-status`
+*   **Pagamento**:
+    *   `POST /api/payment/:userId`
+*   **Documentação Swagger**:
+    *   `GET /swagger`
+    *   `GET /swagger/swagger.json`
 
-Para este projeto, vamos utilizar o **MongoDb** que é um banco de dados não relacional. Um banco de dados não relacional, é um tipo de banco de dados projetado para armazenar e gerenciar grandes volumes de dados de maneira flexível, sem a necessidade de um esquema rígido como nos bancos relacionais tradicionais.
+## Variáveis de Ambiente
 
-- [Atlas](https://account.mongodb.com/)
+Este serviço espera as seguintes variáveis de ambiente:
 
-## Rodar o Projeto
+*   `SERVER_PORT`: Porta em que o serviço irá escutar (padrão: `8081` se não definida).
+*   `MYSQL_DATABASE`: Nome do banco de dados a ser usado.
+*   `MYSQL_USER`: Usuário para conexão com o banco de dados.
+*   `MYSQL_PASSWORD`: Senha para conexão com o banco de dados.
+*   `MYSQL_HOST`: Hostname do servidor de banco de dados.
+*   `JWT_SECRET`: Segredo usado para assinar e verificar tokens JWT.
 
-Primeiramente devemos criar um arquivo de variáveis de ambiente que vamos rodar localmente, para isso na raiz do projeto crie um arquivo `.env` seguindo o modelo `.env.example` disponível no projeto.
+## Configuração e Execução (Dentro do Monorepo)
 
-Após isso as dependências podem ser instaladas com o comando abaixo
+Este serviço é projetado para ser executado como um container Docker, orquestrado pelo `docker-compose.yml` na raiz do monorepositório.
+
+1.  **Contexto de Build**: O Dockerfile para este serviço está localizado em `./transaction/Dockerfile`.
+2.  **Dependências**:
+    *   `transaction-db`: Depende de uma instância de banco de dados MySQL saudável para iniciar.
+    *   `rabbitmq`: Depende que o serviço RabbitMQ esteja iniciado.
+3.  **Porta**: O serviço escuta internamente na porta definida por `SERVER_PORT`. Esta porta não é exposta diretamente ao host, pois o acesso é feito através do API Gateway.
+
+Para iniciar o serviço `transaction-api` junto com os outros componentes:
 
 ```bash
-$ npm install
-```
-
-Para executar o projeto pode ser executado os comandos
-
-```bash
-$ npm start
-$ npm run start:watch
-```
+# Na raiz do monorepositório
+docker-compose up --build -d
