@@ -83,12 +83,13 @@ export const createTransaction = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {userId, totalValue, operation} = req.body;
+    const {userId, totalValue, operation, status} = req.body;
 
-    await Transaction.create({
+    const transaction = await Transaction.create({
       userId,
       totalValue,
       operation,
+      status: status || 'pending' // Default to 'pending' if not provided
     });
 
     res.createdResponse();
@@ -110,7 +111,7 @@ export const editTransaction = async (req, res, next) => {
   }
   */
   try {
-    const {userId, totalValue, operation} = req.body;
+    const {userId, totalValue, operation, status} = req.body;
     const {id} = req.params;
 
     const transaction = await Transaction.findByPk(id);
@@ -123,6 +124,7 @@ export const editTransaction = async (req, res, next) => {
       userId,
       totalValue,
       operation,
+      status: status || transaction.status // Keep existing status if not provided
     });
 
     res.hateoas_item(transaction);

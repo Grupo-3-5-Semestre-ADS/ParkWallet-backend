@@ -12,6 +12,7 @@ const notificationUrl = `http://${process.env.NOTIFICATION_HOST}:${process.env.N
 const transactionUrl = `http://${process.env.TRANSACTION_HOST}:${process.env.TRANSACTION_PORT}`;
 const walletUrl = `http://${process.env.WALLET_HOST}:${process.env.WALLET_PORT}`;
 const userUrl = `http://${process.env.USER_HOST}:${process.env.USER_PORT}`;
+const paymentUrl = `http://${process.env.PAYMENT_HOST}:${process.env.PAYMENT_PORT}`;
 
 const serviceRegistry = {
     products: catalogUrl,
@@ -20,7 +21,8 @@ const serviceRegistry = {
     notifications: notificationUrl,
     transactions: transactionUrl,
     itemsTransaction: transactionUrl,
-    payment: transactionUrl, 
+    payment: transactionUrl, // Para pagamentos de produtos (existente)
+    recharges: paymentUrl,   // Novo endpoint para recargas
     wallets: walletUrl,
     users: userUrl,
     roles: userUrl,
