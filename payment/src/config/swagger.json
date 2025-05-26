@@ -1,0 +1,143 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Payment API",
+    "description": "API para simulação de recargas de crédito do ParkWallet",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "paths": {
+    "/recharges/{userId}": {
+      "post": {
+        "summary": "Processa uma recarga de crédito",
+        "tags": ["Recharges"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RechargeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recarga processada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RechargeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Carteira não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RechargeRequest": {
+        "type": "object",
+        "required": ["amount"],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Valor da recarga",
+            "example": 50.0
+          }
+        }
+      },
+      "RechargeResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Recarga processada com sucesso"
+          },
+          "transaction": {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "string",
+                "example": "123"
+              },
+              "amount": {
+                "type": "number",
+                "example": 50.0
+              },
+              "newBalance": {
+                "type": "number",
+                "example": 150.0
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2023-08-01T12:00:00Z"
+              },
+              "status": {
+                "type": "string",
+                "example": "completed"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Erro na requisição"
+          }
+        }
+      }
+    }
+  }
+}
