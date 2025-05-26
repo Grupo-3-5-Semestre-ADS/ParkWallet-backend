@@ -6,7 +6,6 @@ import handlers from "./middlewares/handlers.js";
 
 import InternalServerError from './routes/helper/500.js'
 import NotFound from './routes/helper/404.js'
-import itemTransactionRouter from "./routes/itemTransactionRouter.js";
 import transactionRouter from "./routes/transactionRouter.js";
 import paymentRouter from "./routes/paymentRouter.js";
 
@@ -19,7 +18,6 @@ routes.use(handlers);
 routes.use(order);
 
 routes.use("/api/transactions", /*verify,*/ transactionRouter);
-routes.use("/api/itemsTransaction", /*verify,*/ itemTransactionRouter);
 routes.use("/api/payment", /*verify,*/ paymentRouter);
 
 routes.use(InternalServerError)

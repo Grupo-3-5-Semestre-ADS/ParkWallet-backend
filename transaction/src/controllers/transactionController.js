@@ -85,11 +85,11 @@ export const createTransaction = async (req, res, next) => {
   try {
     const {userId, totalValue, operation, status} = req.body;
 
-    const transaction = await Transaction.create({
+    await Transaction.create({
       userId,
       totalValue,
       operation,
-      status: status || 'pending' // Default to 'pending' if not provided
+      status: status || 'pending'
     });
 
     res.createdResponse();

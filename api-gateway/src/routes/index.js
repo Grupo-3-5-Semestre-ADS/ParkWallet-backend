@@ -20,9 +20,8 @@ const serviceRegistry = {
     chats: chatUrl,
     notifications: notificationUrl,
     transactions: transactionUrl,
-    itemsTransaction: transactionUrl,
-    payment: transactionUrl, // Para pagamentos de produtos (existente)
-    recharges: paymentUrl,   // Novo endpoint para recargas
+    payment: transactionUrl,
+    recharges: paymentUrl,
     wallets: walletUrl,
     users: userUrl,
     roles: userUrl,
@@ -31,11 +30,11 @@ const serviceRegistry = {
 
 router.post('/login', proxy(userUrl, {
     proxyReqPathResolver: (req) => '/login'
-  }));
-  
-  router.post('/register', proxy(userUrl, {
+}));
+
+router.post('/register', proxy(userUrl, {
     proxyReqPathResolver: (req) => '/register'
-  }));
+}));
 
 router.use('/api', (req, res, next) => {
     const pathSegments = req.path.split('/').filter(Boolean);

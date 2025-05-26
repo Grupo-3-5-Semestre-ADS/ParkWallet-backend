@@ -47,20 +47,6 @@ const doc = {
         href: "/api/endpoint",
         method: "METHOD"
       },
-      ItemsTransaction: {
-        id: "id",
-        productId: "id",
-        quantity: 10,
-        totalValue: 100.00,
-        _links: [
-          {$ref: "#/components/schemas/HateoasLink"}
-        ]
-      },
-      CreateOrUpdateItemTransaction: {
-        productId: "id",
-        quantity: 10,
-        totalValue: 100.00
-      },
       Transaction: {
         id: "id",
         userId: "userId",
