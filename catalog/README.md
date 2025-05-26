@@ -12,7 +12,7 @@ Os principais endpoints são prefixados com `/api`:
     *   `POST /api/products`
     *   `PUT /api/products/:id`
     *   `PATCH /api/products/:id/toggle-status`
-*   **Instalações (Facilities)**:
+*   **Instalações**:
     *   `GET /api/facilities`
     *   `GET /api/facilities/:id/products`
     *   `GET /api/facilities/:id/transactions`
@@ -21,8 +21,8 @@ Os principais endpoints são prefixados com `/api`:
     *   `PUT /api/facilities/:id`
     *   `PATCH /api/facilities/:id/toggle-status`
 *   **Documentação Swagger**:
-    *   `GET /swagger`: Interface do Swagger UI.
-    *   `GET /swagger/swagger.json`: Definição da API no formato JSON.
+    *   `GET /swagger`
+    *   `GET /swagger/swagger.json`
 
 ## Variáveis de Ambiente
 
