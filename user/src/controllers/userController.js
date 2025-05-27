@@ -1,4 +1,5 @@
 import User from '../models/userModel.js';
+import {Op} from "sequelize";
 
 export const login = async (req, res, next) => {
   /*
@@ -54,7 +55,7 @@ export const listUsers = async (req, res, next) => {
     #swagger.responses[200]
   */
   try {
-    const {_page = 1, _size = 10, _order = 'id', ...filter} = req.query;
+    const {_page = "1", _size = "10", _order = 'id', search = "", ...filter} = req.query;
 
     const page = parseInt(_page) || 1;
     const size = parseInt(_size) || 10;
@@ -62,11 +63,18 @@ export const listUsers = async (req, res, next) => {
 
     const allowedFilters = ['email', 'name', 'cpf'];
     const where = {};
+
+    if (search && search !== "") {
+      where.name = {
+        [Op.like]: `%${search}%`
+      };
+    }
+
     for (const key of allowedFilters) {
       if (filter[key]) where[key] = filter[key];
     }
 
-    const { rows: users, count: totalItems } = await User.findAndCountAll({
+    const {rows: users, count: totalItems} = await User.findAndCountAll({
       where,
       offset,
       limit: size,
@@ -151,12 +159,12 @@ export const changeUserRole = async (req, res, next) => {
     #swagger.responses[404]
   */
   try {
-    const { id } = req.params;
-    const { role } = req.body;
+    const {id} = req.params;
+    const {role} = req.body;
 
     const validRoles = ['CUSTOMER', 'ADMIN', 'SELLER'];
     if (!validRoles.includes(role)) {
-      return res.status(400).json({ message: 'Role inválida. As opções são: CUSTOMER, ADMIN, SELLER.' });
+      return res.status(400).json({message: 'Role inválida. As opções são: CUSTOMER, ADMIN, SELLER.'});
     }
 
     const user = await User.findByPk(id);
@@ -164,7 +172,7 @@ export const changeUserRole = async (req, res, next) => {
       return res.notFoundResponse();
     }
 
-    await user.update({ role });
+    await user.update({role});
 
     return res.hateoas_item(user);
   } catch (err) {

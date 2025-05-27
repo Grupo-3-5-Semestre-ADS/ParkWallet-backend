@@ -1,5 +1,6 @@
 import {Facility, Product} from "../models/index.js";
 import axios from "axios";
+import {Op} from "sequelize";
 
 export const showFacility = async (req, res, next) => {
   /*
@@ -30,9 +31,19 @@ export const listFacilities = async (req, res, next) => {
   #swagger.responses[200]
   */
   try {
-    const {_page = "1", _size = "10", _order = 'id', activesOnly = "false"} = req.query;
+    const {_page = "1", _size = "10", _order = 'id', activesOnly = "false", search = ""} = req.query;
     const offset = (parseInt(_page) - 1) * _size;
-    const where = activesOnly === "true" ? {active: true} : {};
+    const where = {};
+
+    if (activesOnly === "true") {
+      where.active = true;
+    }
+
+    if (search && search !== "") {
+      where.name = {
+        [Op.like]: `%${search}%`
+      };
+    }
 
     const {rows: Facilities, count: totalItems} = await Facility.findAndCountAll({
       where,
