@@ -179,3 +179,55 @@ export const changeUserRole = async (req, res, next) => {
     next(err);
   }
 };
+
+export const resetPassword = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Users"]
+  #swagger.responses[200]
+  #swagger.responses[400]
+  */
+  try {
+    const {id} = req.params;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.notFoundResponse();
+    }
+
+    await user.update({password: 'changeme'});
+
+    res.okResponse();
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Users"]
+  #swagger.responses[200]
+  #swagger.responses[400]
+  */
+  try {
+    const {id} = req.params;
+    const {oldPassword, newPassword} = req.body;
+
+    const user = await User.scope('withPassword').findByPk(id);
+
+    if (!user) {
+      return res.notFoundResponse();
+    }
+
+    const isPasswordCorrect = await user.comparePassword(oldPassword);
+
+    if (!isPasswordCorrect) {
+      return res.unauthorized();
+    }
+
+    await user.update({password: newPassword});
+
+    return res.okResponse();
+  } catch (err) {
+    next(err);
+  }
+};
