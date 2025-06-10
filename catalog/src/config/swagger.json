@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080"
+      "url": "http://localhost:8081"
     }
   ],
   "paths": {
@@ -41,6 +41,13 @@
           },
           {
             "name": "activesOnly",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
             "in": "query",
             "schema": {
               "type": "string"
@@ -81,7 +88,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -220,7 +232,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -421,6 +438,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -615,14 +639,7 @@
             }
           },
           {
-            "name": "_page",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "_size",
+            "name": "schema",
             "in": "query",
             "schema": {
               "type": "string"

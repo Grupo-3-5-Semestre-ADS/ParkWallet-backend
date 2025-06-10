@@ -21,7 +21,7 @@ export const generate = (req, res, next) => {
   res.okResponse({ token });
 };
 
-export const verify = (role) => {
+export const verify = (authorizedRoles = []) => {
   return (req, res, next) => {
     /*
     #swagger.autoHeaders = false
@@ -30,27 +30,36 @@ export const verify = (role) => {
     }]
     */
     const authHeader = req.headers.authorization;
-    console.log("authHeader", authHeader);
 
-    if (!!authHeader) {
-      const token = authHeader.split(" ")[1];
-
-      const JWTSECRET = process.env.JWT_SECRET;
-      return jsonwebtoken.verify(token, JWTSECRET, (err, payload) => {
-        if (err) return res.unauthorized();
-
-        req.payload = payload;
-
-        // Se o usuário for ADMIN, ignore a verificação de outras roles
-        if (payload.role === 'ADMIN') return next();
-
-        // Verifica se o usuário tem a role necessária
-        if (role && payload.role !== role) return res.unauthorized('Role não autorizada');
-
-        return next();
-      });
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.unauthorized();
     }
 
-    res.unauthorized();
+    const token = authHeader.split(' ')[1];
+    const JWT_SECRET = process.env.JWT_SECRET;
+
+    jsonwebtoken.verify(token, JWT_SECRET, (err, payload) => {
+      if (err) {
+        return res.unauthorized();
+      }
+
+      req.payload = payload;
+
+      const {role: userRole} = payload;
+
+      if (userRole === 'ADMIN') {
+        return next();
+      }
+
+      if (authorizedRoles.length === 0) {
+        return next();
+      }
+
+      if (authorizedRoles.includes(userRole)) {
+        return next();
+      }
+
+      return res.unauthorized();
+    });
   };
 };

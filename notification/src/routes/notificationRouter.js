@@ -8,13 +8,14 @@ import {
   listNotifications,
   showNotification
 } from "../controllers/notificationController.js";
+import {verify} from "../controllers/authController.js";
 
 const router = Router()
 
-router.get('/', listNotifications)
-router.get('/:id', showNotification)
-router.post('/', validator(schema), createNotification)
-router.put('/:id', validator(schema), editNotification)
-router.delete('/:id', deleteNotification)
+router.get('/', verify(["ADMIN"]), listNotifications)
+router.get('/:id', verify(["ADMIN"]), showNotification)
+router.post('/', verify(["ADMIN"]), validator(schema), createNotification)
+router.put('/:id', verify(["ADMIN"]), validator(schema), editNotification)
+router.delete('/:id', verify(["ADMIN"]), deleteNotification)
 
 export default router

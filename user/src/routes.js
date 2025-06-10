@@ -11,8 +11,6 @@ import UserRouter from "./routes/userRouter.js";
 import AuthRouter from './routes/authRouter.js';
 import RegisterRouter from './routes/registerRouter.js';
 
-import { verify } from "./controllers/authController.js";
-
 const routes = Router()
 routes.use(order);
 routes.use(hateoas);
@@ -20,7 +18,7 @@ routes.use(handler);
 
 routes.use("/login", AuthRouter);
 routes.use("/register", RegisterRouter);
-routes.use("/api/users", /*verify("SELLER"),*/ UserRouter);
+routes.use("/api/users",  UserRouter);
 
 
 routes.use(InternalServerError);

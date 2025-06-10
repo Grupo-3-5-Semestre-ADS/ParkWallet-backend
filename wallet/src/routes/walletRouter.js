@@ -10,14 +10,15 @@ import {
   showWallet,
   patchBalance,
 } from "../controllers/walletController.js";
+import {verify} from "../controllers/authController.js";
 
 const router = Router()
 
-router.get('/', listWallets)
+router.get('/', verify(["ADMIN"]), listWallets)
 router.get('/:id', showWallet)
-router.post('/', validator(schema), createWallet)
-router.put('/:id', validator(schema), editWallet)
-router.delete('/:id', deleteWallet)
+router.post('/', verify(["ADMIN"]), validator(schema), createWallet)
+router.put('/:id', verify(["ADMIN"]), validator(schema), editWallet)
+router.delete('/:id', verify(["ADMIN"]), deleteWallet)
 router.patch('/:id/balance', validator(balanceSchema), patchBalance)
 
 export default router
