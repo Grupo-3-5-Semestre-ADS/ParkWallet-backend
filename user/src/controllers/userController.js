@@ -103,7 +103,10 @@ export const editUser = async (req, res, next) => {
 
     if (!user) return res.notFoundResponse();
 
-    const {name, email, cpf, password, birthdate, active} = req.body;
+    let {name, email, cpf, password, birthdate, active} = req.body;
+
+    if (!cpf) cpf = user.cpf;
+    if (active === undefined) active = user.active;
 
     const updates = {name, email, cpf, birthdate, active};
     if (active !== undefined) updates.active = active;
