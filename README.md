@@ -47,7 +47,7 @@ O sistema é composto pelos seguintes componentes principais:
 1. **Clone o repositório:**
     ```bash
     git clone https://github.com/Grupo-3-5-Semestre-ADS/ParkWallet-backend.git
-    cd <nome-do-diretorio>
+    cd ParkWallet-backend
     ```
 
 2. **Estrutura de Diretórios:**
