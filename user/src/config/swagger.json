@@ -242,7 +242,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       }
     },
     "/api/users/{id}": {
@@ -362,6 +367,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -444,7 +454,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       }
     },
     "/api/users/{id}/role": {
@@ -504,6 +519,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -574,7 +594,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       }
     },
     "/api/users/{id}/change-password": {
@@ -631,6 +656,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {

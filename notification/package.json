@@ -6,7 +6,10 @@
     "start": "node src/server",
     "start:watch": "node --watch src/server",
     "swagger": "node src/swagger",
-    "swagger:watch": "node --watch src/swagger"
+    "swagger:watch": "node --watch src/swagger",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage"
   },
   "dependencies": {
     "compression": "~1.8.0",
@@ -23,6 +26,13 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
-    "swagger-autogen": "^2.23.7"
+    "swagger-autogen": "^2.23.7",
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@jest/globals": "^29.7.0",
+    "babel-jest": "^29.7.0",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
   }
 }
