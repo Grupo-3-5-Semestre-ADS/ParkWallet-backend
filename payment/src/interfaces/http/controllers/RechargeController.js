@@ -14,6 +14,7 @@ export default {
     try {
       const { userId } = req.params;
       const { amount } = req.body;
+      const token = req.token;
 
       console.log(`Processando recarga para usuário ${userId} no valor de ${amount}`);
 
@@ -24,7 +25,7 @@ export default {
       }
 
       // Executa o caso de uso para processar a recarga
-      const result = await ProcessRechargeUseCase.execute(userId, amount);
+      const result = await ProcessRechargeUseCase.execute(userId, amount, token);
       
       console.log(`Recarga processada com sucesso: ${JSON.stringify(result)}`);
       

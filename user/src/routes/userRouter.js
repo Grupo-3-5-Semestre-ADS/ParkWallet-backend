@@ -17,7 +17,7 @@ const router = Router();
 
 router.get('/', verify(["ADMIN"]), listUsers);
 router.get('/:id', showUser);
-router.put('/:id', verify(["ADMIN"]), validator(updateUserSchema), editUser);
+router.put('/:id', verify(), validator(updateUserSchema), editUser);
 router.patch('/:id/toggle-status', verify(["ADMIN"]), toggleUserStatus);
 router.patch('/:id/role', verify(["ADMIN"]), changeUserRole);
 router.post('/:id/reset-password', verify(["ADMIN"]), resetPassword);

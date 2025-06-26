@@ -5,23 +5,35 @@ const { sequelize } = database;
 
 const API_GATEWAY_BASE_URL = process.env.API_GATEWAY_URL || 'http://localhost:8080';
 
-async function fetchProductDetailsAndCalculateValue(productInput) {
+async function fetchProductDetailsAndCalculateValue(productInput, token) {
+    console.log("token", token);
     const { productId, quantity } = productInput;
     if (!productId || quantity == null || quantity < 0) {
         throw new Error(`Dados inválidos para o produto: productId=${productId}, quantity=${quantity}`);
     }
 
     const catalogApiUrl = `${API_GATEWAY_BASE_URL}/api/products/${productId}`;
-    const response = await fetch(catalogApiUrl);
+    const response = await fetch(catalogApiUrl, {
+    headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
+    });
 
     if (!response.ok) {
         let errorDetails = "";
         try {
-            const errorBody = await response.json();
-            if (errorBody && errorBody.error) errorDetails = ` Detalhes: ${errorBody.error}`;
-            else if (errorBody && errorBody.message) errorDetails = ` Detalhes: ${errorBody.message}`;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const errorBody = await response.json();
+                if (errorBody?.error) errorDetails = ` Detalhes: ${errorBody.error}`;
+                else if (errorBody?.message) errorDetails = ` Detalhes: ${errorBody.message}`;
+            } else {
+                const text = await response.text();
+                if (text) errorDetails = ` Detalhes: ${text}`;
+            }
         } catch (e) {
-          console.error(e)
+            console.error("Erro ao parsear erro da catalog-api:", e);
         }
 
         if (response.status === 404) {
@@ -71,7 +83,7 @@ export const makePayment = async (req, res, next) => {
         }
 
         const productDetailsPromises = requestedProducts.map(p =>
-            fetchProductDetailsAndCalculateValue(p).catch(err => {
+            fetchProductDetailsAndCalculateValue(p, req.token).catch(err => {
                 err.productId = p.productId;
                 throw err;
             })

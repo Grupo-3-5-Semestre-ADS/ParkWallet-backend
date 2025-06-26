@@ -12,7 +12,7 @@ class ProcessRechargeUseCase {
    * @param {number} amount Valor da recarga
    * @returns {Promise<Object>} Resultado da operação
    */
-  async execute(userId, amount) {
+  async execute(userId, amount, token) {
     try {
       // Cria a entidade de recarga usando o serviço de domínio
       const recharge = RechargeService.createRecharge(userId, amount);
@@ -31,7 +31,7 @@ class ProcessRechargeUseCase {
         recharge.complete(walletData.balance);
         
         // Registra a transação no microsserviço de transações
-        await TransactionRepository.createTransaction(recharge.toTransactionData());
+        await TransactionRepository.createTransaction(recharge.toTransactionData(), token);
         
         // Retorna o resultado da operação
         return recharge.toResponseData();

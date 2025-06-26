@@ -9,7 +9,7 @@ import NotFound from './routes/helper/404.js'
 import transactionRouter from "./routes/transactionRouter.js";
 import paymentRouter from "./routes/paymentRouter.js";
 
-// import {verify} from "./controllers/authController.js";
+import {verify} from "./controllers/authController.js";
 
 const routes = Router();
 routes.use(order);
@@ -17,8 +17,8 @@ routes.use(hateoas);
 routes.use(handlers);
 routes.use(order);
 
-routes.use("/api/transactions", /*verify,*/ transactionRouter);
-routes.use("/api/payment", /*verify,*/ paymentRouter);
+routes.use("/api/transactions", verify(), transactionRouter);
+routes.use("/api/payment", verify(), paymentRouter);
 
 routes.use(InternalServerError)
 routes.use(NotFound)

@@ -26,7 +26,10 @@ export const processRecharge = async (req, res, next) => {
     try {
       const transactionResponse = await fetch(transactionApiUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': req.token
+        },
         body: JSON.stringify({
           userId: parseInt(userId),
           totalValue: amount,

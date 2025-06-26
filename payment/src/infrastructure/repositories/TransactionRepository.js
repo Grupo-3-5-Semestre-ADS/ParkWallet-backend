@@ -13,14 +13,17 @@ class TransactionRepository {
    * @param {Object} transactionData Dados da transação
    * @returns {Promise<Object>} Transação criada
    */
-  async createTransaction(transactionData) {
+  async createTransaction(transactionData, token) {
     const transactionApiUrl = `${this.transactionApiUrl}/api/transactions`;
     console.log(`INFO: Criando registro de transação para recarga do usuário ${transactionData.userId} via Transaction API: ${transactionApiUrl}`);
     
     try {
       const response = await fetch(transactionApiUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(transactionData)
       });
 

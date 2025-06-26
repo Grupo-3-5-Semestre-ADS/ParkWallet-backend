@@ -16,7 +16,6 @@ export const verify = (authorizedRoles = []) => {
 
     const token = authHeader.split(' ')[1];
     req.token = token;
-  
     const JWT_SECRET = process.env.JWT_SECRET;
 
     jsonwebtoken.verify(token, JWT_SECRET, (err, payload) => {
