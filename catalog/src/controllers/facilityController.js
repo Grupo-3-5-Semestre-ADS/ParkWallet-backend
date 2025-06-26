@@ -126,8 +126,14 @@ export const listTransactionsByFacility = async (req, res, next) => {
       _page,
       _size,
     };
+    const headers = {
+      Authorization: `Bearer ${req.token}`, 
+    };
 
-    const transactionServiceResponse = await axios.get(transactionsEndpoint, {params});
+    const transactionServiceResponse = await axios.get(transactionsEndpoint, {
+      params,
+      headers,
+    });
     const transactionData = transactionServiceResponse.data;
 
     if (!transactionData || !Array.isArray(transactionData.data) || transactionData.data.length === 0) {
